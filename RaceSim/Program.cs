@@ -1,2 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+using Controller;
+using Model;
+Data.Initialize(new Competition(null,null));
+Data.addParticipants();
