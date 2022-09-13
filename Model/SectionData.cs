@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Model {
-    internal class SectionData {
+    public class SectionData {
         public IParticipant Left { get; set; }
         public int DistanceRight { get; set; }
         public IParticipant Right { get; set; }
