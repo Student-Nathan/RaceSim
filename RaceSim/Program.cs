@@ -5,7 +5,6 @@ internal class Program {
     private static void Main(string[] args) {
         Data.Initialize();
         Data.nextRace();
-        Console.WriteLine("test print");
         Console.WriteLine(Data.currentRace.Track.Name);
         Data.nextRace();
         Console.WriteLine(Data.currentRace.Track.Name);

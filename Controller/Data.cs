@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -12,6 +13,8 @@ namespace Controller{
 
         public static void Initialize() {
             Competition = new Competition();
+            addParticipants();
+            addTracks();
         }
         public static void addParticipants() {
             Driver driver1 = new Driver();
@@ -23,7 +26,9 @@ namespace Controller{
         public static void nextRace() {
             Track next = Competition.NextTrack();
             if (next != null) {
-               currentRace = new Race(next, Competition.Participants);
+                Race race1 = new Race(next, Competition.Participants);
+                race1.RandomizeEquipment();
+               currentRace = race1;
             } else {
                 currentRace = null;
             }
@@ -31,8 +36,12 @@ namespace Controller{
         
 
         public static void addTracks() {
-            SectionTypes[] sections = new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.RightCorner };
-            Competition.Tracks.Enqueue(new Track("Test", sections));
+            SectionTypes[] sectionTypes = new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.LeftCorner };
+            Track track1 = new Track("testTrack", sectionTypes);
+            sectionTypes = new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.LeftCorner };
+            Track track2 = new Track("test2", sectionTypes);
+            Competition.Tracks.Enqueue(track1);
+            Competition.Tracks.Enqueue(track2);
         }
     }
 }
