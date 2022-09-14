@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Controller;
+﻿using Controller;
 using Model;
 internal class Program {
     private static void Main(string[] args) {
