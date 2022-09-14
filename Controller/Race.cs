@@ -10,6 +10,7 @@ namespace Controller {
         public Race(Track track, List<IParticipant> participants){
             Track = track;
             Participants = participants;
+            _positions = new Dictionary<Section, SectionData>();
             _random = new Random(DateTime.Now.Millisecond);
             
         }
