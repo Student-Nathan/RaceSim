@@ -15,15 +15,15 @@ namespace Controller {
         }
         public SectionData getSectionData(Section section) {
             if (!_positions.ContainsKey(section)) {
-                _positions[section] = new SectionData(null,0,null,0);
+                _positions[section] = new SectionData();
             }
             return _positions[section];
         }//voor in college: vraag naar constructors
 
         public void RandomizeEquipment() {
             foreach (var participant in Participants) {
-                participant.equipment.Quality = _random.Next(DateTime.Now.Millisecond);
-                participant.equipment.Performance = _random.Next(DateTime.Now.Millisecond);
+                participant.Equipment.Quality = _random.Next(DateTime.Now.Millisecond);
+                participant.Equipment.Performance = _random.Next(DateTime.Now.Millisecond);
             }
         }
     }

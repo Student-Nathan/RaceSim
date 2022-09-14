@@ -11,11 +11,9 @@ namespace Model {
         public IParticipant Right { get; set; }
         public int DistanceLeft { get; set; }
 
-        public SectionData(IParticipant left, int distanceLeft, IParticipant right, int distanceRight) {
-            Left = left;
-            Right = right;
-            DistanceLeft = distanceLeft;
-            DistanceRight = distanceRight;
+        public SectionData() {
+            Left = new Driver();
+            Right = new Driver();
         }
     }
 }
