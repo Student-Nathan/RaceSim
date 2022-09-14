@@ -9,11 +9,19 @@ namespace Model {
     public class Competition {
         public List<IParticipant> Participants;
         public Queue<Track> Tracks;
+
         public Competition() {
             Participants = new List<IParticipant> { };
-            Tracks = new Queue<Track> { };
+            Tracks = new Queue<Track>();
+            SectionTypes[] sectionTypes = new SectionTypes[] {SectionTypes.StartGrid,SectionTypes.LeftCorner};
+            Track track1 = new Track("testTrack", sectionTypes);
+            sectionTypes = new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.LeftCorner };
+            Track track2 = new Track ("test2",sectionTypes);
+            Tracks.Enqueue(null);
+            Tracks.Enqueue(track1);
+            Tracks.Enqueue(track2);
         }
-        public Track NextTrack() {
+        public Track NextTrack() { 
             if (Tracks.Count == 1) {
                 Tracks.Dequeue();
                 return null;

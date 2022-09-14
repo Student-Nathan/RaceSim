@@ -12,7 +12,6 @@ namespace Controller{
 
         public static void Initialize() {
             Competition = new Competition();
-            currentRace = nextRace();
         }
         public static void addParticipants() {
             Driver driver1 = new Driver();
@@ -21,11 +20,12 @@ namespace Controller{
             Competition.Participants.Add(driver2);
         }
 
-        public static Race nextRace() {
-            if (Competition.NextTrack() != null) {
-                return new Race(Competition.NextTrack(), Competition.Participants);
+        public static void nextRace() {
+            Track next = Competition.NextTrack();
+            if (next != null) {
+               currentRace = new Race(next, Competition.Participants);
             } else {
-                return null;
+                currentRace = null;
             }
         }
         
