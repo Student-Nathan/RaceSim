@@ -7,12 +7,12 @@ namespace Controller {
         public DateTime StartTime { get; set; }
         private Random _random;
         private Dictionary<Section, SectionData> _positions;
+
         public Race(Track track, List<IParticipant> participants){
             Track = track;
             Participants = participants;
             _positions = new Dictionary<Section, SectionData>();
-            _random = new Random(DateTime.Now.Millisecond);
-            
+            _random = new Random(DateTime.Now.Millisecond);  
         }
         public SectionData getSectionData(Section section) {
             if (!_positions.ContainsKey(section)) {
@@ -23,8 +23,8 @@ namespace Controller {
 
         public void RandomizeEquipment() {
             foreach (var participant in Participants) {
-                participant.Equipment.Quality = _random.Next(DateTime.Now.Millisecond);
-                participant.Equipment.Performance = _random.Next(DateTime.Now.Millisecond);
+                participant.Equipment.Quality = _random.Next(1,20);
+                participant.Equipment.Performance = _random.Next(1,20);
             }
         }
     }

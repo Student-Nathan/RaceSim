@@ -12,8 +12,7 @@ namespace Model {
         public int DistanceLeft { get; set; }
 
         public SectionData() {
-            Left = new Driver();
-            Right = new Driver();
+          
         }
     }
 }

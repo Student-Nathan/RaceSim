@@ -14,9 +14,11 @@ namespace Model {
 
         public TeamColor TeamColor { get; set; }
 
-        public Driver() {
+        public Driver(String name, TeamColor teamColor) {
+            Name = name;
+            Points = 0;
             Equipment = new Car();
-            TeamColor = new TeamColor();
+            TeamColor = teamColor;
         }
     }
 }

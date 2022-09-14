@@ -17,9 +17,9 @@ namespace Controller{
             addTracks();
         }
         public static void addParticipants() {
-            Driver driver1 = new Driver();
+            Driver driver1 = new Driver("TestDriver",TeamColor.Red);
             Competition.Participants.Add(driver1);
-            Driver driver2 = new Driver();
+            Driver driver2 = new Driver("TestDriver2",TeamColor.Green);
             Competition.Participants.Add(driver2);
         }
 
