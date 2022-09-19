@@ -22,7 +22,7 @@ namespace Controller {
         }//voor in college: vraag naar constructors
 
         public void RandomizeEquipment() {
-            foreach (var participant in Participants) {
+            foreach (IParticipant participant in Participants) {
                 participant.Equipment.Quality = _random.Next(1,20);
                 participant.Equipment.Performance = _random.Next(1,20);
             }
