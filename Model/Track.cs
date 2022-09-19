@@ -12,8 +12,10 @@ namespace Model {
 
         public Track(String name, SectionTypes[] sections) {
             Name = name;
-            Sections = new LinkedList<Section>(Sections);
-           
+            Sections = new LinkedList<Section>();
+            foreach(SectionTypes type in sections) {
+                Sections.AddLast(new Section(type));
+            }           
         }
 
     }

@@ -1,28 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Model;
 namespace Controller{
     public static class Data {
         public static Competition Competition;
+        public static Race currentRace;
 
-        public static void Initialize(Competition competition) {
-            Competition = competition;
+        public static void Initialize() {
+            Competition = new Competition();
+            addParticipants();
+            addTracks();
         }
         public static void addParticipants() {
-            Car car1 = new Car(3, 4, 5, false);
-            Driver driver1 = new Driver("test1", 0,car1,TeamColor.Red);
+            Driver driver1 = new Driver("TestDriver",TeamColor.Red);
             Competition.Participants.Add(driver1);
-            Car car2 = new Car(4, 3, 5, false);
-            Driver driver2 = new Driver("test1", 0, car1, TeamColor.Red);
-            Competition.Participants.Add(driver1);
+            Driver driver2 = new Driver("TestDriver2",TeamColor.Green);
+            Competition.Participants.Add(driver2);
         }
 
+        public static void nextRace() {
+            Track next = Competition.NextTrack();
+            if (next != null) {
+                Race race1 = new Race(next, Competition.Participants);
+                race1.RandomizeEquipment();
+               currentRace = race1;
+            } else {
+                currentRace = null;
+            }
+        }
+        
+
         public static void addTracks() {
-            SectionTypes[] sections = new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.RightCorner };
-            Competition.Tracks.Enqueue(new Track("Test", sections));
+            SectionTypes[] sectionTypes = new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.LeftCorner };
+            Track track1 = new Track("testTrack", sectionTypes);
+            sectionTypes = new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.LeftCorner };
+            Track track2 = new Track("test2", sectionTypes);
+            Competition.Tracks.Enqueue(track1);
+            Competition.Tracks.Enqueue(track2);
         }
     }
 }

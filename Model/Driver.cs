@@ -10,14 +10,14 @@ namespace Model {
 
         public int Points { get; set; }
 
-        public IEquipment equipment { get; set; }
+        public IEquipment Equipment { get; set; }
 
         public TeamColor TeamColor { get; set; }
 
-        public Driver(String name, int points, IEquipment equipment, TeamColor teamColor) {
+        public Driver(String name, TeamColor teamColor) {
             Name = name;
-            Points = points;
-            this.equipment = equipment;
+            Points = 0;
+            Equipment = new Car();
             TeamColor = teamColor;
         }
     }
