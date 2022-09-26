@@ -22,6 +22,5 @@ namespace Model {
             }
             return result;
         }
-
     }
 }
