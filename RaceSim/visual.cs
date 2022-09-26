@@ -7,23 +7,27 @@ using Model;
 using Controller;
 
 namespace RaceSim {
-    public static class visual {
+    public static class Visual {
         private static Rotation rotation;
+        private static int posX;
+        private static int posY;
+        private static int graphicLength=4;
         public static void initialize() {
             
         }
 
         #region graphics
         //todo: add own graphics
+        //let op: als graphics aangepast worden, verander dan ook graphicLength
         private static string[] _finishHorizontal = { "----", "  1# ", "  2# ", "----" };
         private static string[] _finishVertical = { };
 
         private static string[] _straightHorizontal = {"----"," 1 "," 2 ","----" };
-        private static string[] _straightVertical = {" |  |"," 1 "," 2 ","|  |" };
+        private static string[] _straightVertical = {" |  |"," |12|"," |  |"," |  |" };
 
         
         private static string[] _cornerNe = { @" /--", @"/1  ", @"| 2 ", @"|  /" };//boven links
-        private static string[] _cornerNw = { @"--\ ", @"  1\", @" 2 |", @"\  |" };//boven rechts
+        private static string[] _cornerNw = { @"---\", @"  1 \", @" 2  |", @"\   |" };//boven rechts
         private static string[] _cornerSe = { @"|  \", @"| 1 ", @"\2  ", @" \--" };//onder rechts
         private static string[] _cornerSw = { @"/  |", @" 1 |", @"  2/", @"--/ " };//onder links
 
@@ -42,10 +46,15 @@ namespace RaceSim {
 
         public static void drawTrack(Track track) {
             resetTrack();
+            Boolean first = true;
+            Console.WriteLine(track.Name);
             foreach (Section section in track.Sections) {
-                foreach(String sectionPart in getGraphics(section, rotation)) {
+                foreach (String sectionPart in getGraphics(section, rotation)) {
+                    Console.SetCursorPosition(posX, posY);
+                    posY += 1;
                     Console.WriteLine(sectionPart);
                 }
+                posY-=graphicLength;
                 switch (section.SectionType) {
                     case SectionTypes.LeftCorner:
                         switch (rotation) {
@@ -57,19 +66,30 @@ namespace RaceSim {
                         break;
                     case SectionTypes.RightCorner:
                         switch (rotation) {//nog goed doen
-                            case Rotation.EastWest: rotation = Rotation.SouthNorth; break;
-                            case Rotation.SouthNorth: rotation = Rotation.WestEast; break;
-                            case Rotation.WestEast: rotation = Rotation.SouthNorth; break;
-                            case Rotation.NorthSouth: rotation = Rotation.EastWest; break;
+                            case Rotation.EastWest: rotation = Rotation.NorthSouth; break;
+                            case Rotation.SouthNorth: rotation = Rotation.EastWest; break;
+                            case Rotation.WestEast: rotation = Rotation.NorthSouth; break;
+                            case Rotation.NorthSouth: rotation = Rotation.WestEast; break;
                         }
                         break;
+                }
+                if (!first) {
+                    switch (rotation) {
+                        case Rotation.EastWest: posX += graphicLength; break;
+                        case Rotation.NorthSouth: posY += graphicLength; break;
+                        case Rotation.WestEast: posX -= graphicLength; break;
+                        case Rotation.SouthNorth: posY -= graphicLength; break;
+                    }
+                } else {
+                    first = false;
                 }
             }
         }
 
         public static void resetTrack() {
             Console.Clear();
-            Console.SetCursorPosition(0, 0);
+            posX = 0;
+            posY = 1;
             rotation = Rotation.EastWest;
         }
 
