@@ -18,6 +18,7 @@ namespace Model {
         LeftCorner,
         RightCorner,
         StartGrid,
-        Finish
+        Finish,
+        Empty
     }
 }

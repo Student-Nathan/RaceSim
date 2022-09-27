@@ -31,58 +31,66 @@ namespace RaceSim {
         private static string[] _cornerSe = { @"|  \", @"| 1 ", @"\2  ", @" \--" };//onder rechts
         private static string[] _cornerSw = { @"/  |", @" 1 |", @"  2/", @"--/ " };//onder links
 
-        private static string[] _startGridHorizontal = { "----", " 1] ", "2]  ", "----" };
-        private static string[] _startGridVertical = { };
+        private static string[] _startGridHorizontal = { "----", " 1] ", " 2]  ", "----" };
+        //private static string[] _startGridVertical = { @"|⎵ ⎵ |" };
+
+        private static string[] _empty = {"    ", "    ", "    ", "    "};
+
 
         #endregion
 
         public enum Rotation {
-            EastWest, //links naar rechts
+            WestEast, //links naar rechts
             NorthSouth, //boven naar beneden
-            WestEast, //rechts naar links
+            EastWest, //rechts naar links
             SouthNorth, //beneden naar boven
 
         }
 
-        public static void drawTrack(Track track) {
+        public static void drawTrack(Track track, int rotationINT) {
+            
+            switch (rotationINT) {
+                case 0: rotation = Rotation.WestEast; break;
+                case 1: rotation = Rotation.NorthSouth; break;
+                case 2: rotation = Rotation.EastWest; break;
+                case 3: rotation = Rotation.SouthNorth; break;
+            }
             resetTrack();
             Boolean first = true;
             Console.WriteLine(track.Name);
             foreach (Section section in track.Sections) {
-                foreach (String sectionPart in getGraphics(section, rotation)) {
+                foreach (String sectionPart in getGraphics(section, rotation)) {//draws every part of a sectionType
                     Console.SetCursorPosition(posX, posY);
                     posY += 1;
                     Console.WriteLine(sectionPart);
                 }
-                posY-=graphicLength;
-                switch (section.SectionType) {
+                posY -= graphicLength;
+                switch (section.SectionType) {//switch to rotate every section properly and compensate for the empty sectiontype
                     case SectionTypes.LeftCorner:
                         switch (rotation) {
-                            case Rotation.EastWest: rotation = Rotation.SouthNorth; break;
-                            case Rotation.SouthNorth: rotation = Rotation.WestEast; break;
                             case Rotation.WestEast: rotation = Rotation.SouthNorth; break;
-                            case Rotation.NorthSouth: rotation = Rotation.EastWest; break;
-                        }
-                        break;
-                    case SectionTypes.RightCorner:
-                        switch (rotation) {//nog goed doen
-                            case Rotation.EastWest: rotation = Rotation.NorthSouth; break;
                             case Rotation.SouthNorth: rotation = Rotation.EastWest; break;
-                            case Rotation.WestEast: rotation = Rotation.NorthSouth; break;
+                            case Rotation.EastWest: rotation = Rotation.SouthNorth; break;
                             case Rotation.NorthSouth: rotation = Rotation.WestEast; break;
                         }
                         break;
+                    case SectionTypes.RightCorner:
+                        switch (rotation) {
+                            case Rotation.WestEast: rotation = Rotation.NorthSouth; break;
+                            case Rotation.SouthNorth: rotation = Rotation.WestEast; break;
+                            case Rotation.EastWest: rotation = Rotation.SouthNorth; break;
+                            case Rotation.NorthSouth: rotation = Rotation.EastWest; break;
+                        }
+                        break;
+                    case SectionTypes.Empty: posX += graphicLength; break;
+
                 }
-                if (!first) {
-                    switch (rotation) {
-                        case Rotation.EastWest: posX += graphicLength; break;
-                        case Rotation.NorthSouth: posY += graphicLength; break;
-                        case Rotation.WestEast: posX -= graphicLength; break;
-                        case Rotation.SouthNorth: posY -= graphicLength; break;
-                    }
-                } else {
-                    first = false;
-                }
+                switch (rotation) {
+                    case Rotation.WestEast: posX += graphicLength; break;
+                    case Rotation.NorthSouth: posY += graphicLength; break;
+                    case Rotation.EastWest: posX -= graphicLength; break;
+                    case Rotation.SouthNorth: posY -= graphicLength; break;
+                }            
             }
         }
 
@@ -90,7 +98,6 @@ namespace RaceSim {
             Console.Clear();
             posX = 0;
             posY = 1;
-            rotation = Rotation.EastWest;
         }
 
 //delete this, not used
@@ -115,48 +122,49 @@ namespace RaceSim {
 
         public static String[] getGraphics(Section section, Rotation rotation) {
             switch (section.SectionType) {
+                case SectionTypes.Empty: return _empty;
                 case SectionTypes.Straight:
                     switch (rotation) {
-                        case Rotation.EastWest: return _straightHorizontal;
-                        case Rotation.NorthSouth: return _straightVertical;
                         case Rotation.WestEast: return _straightHorizontal;
+                        case Rotation.NorthSouth: return _straightVertical;
+                        case Rotation.EastWest: return _straightHorizontal;
                         case Rotation.SouthNorth: return _straightVertical;
                     }
                     break;
                 case (SectionTypes.LeftCorner):
                     switch (rotation) {
-                        case Rotation.EastWest: return _cornerSw;
+                        case Rotation.WestEast: return _cornerSw;
                         case Rotation.NorthSouth: return _cornerSe;
-                        case Rotation.WestEast: return _cornerNe;
+                        case Rotation.EastWest: return _cornerNe;
                         case Rotation.SouthNorth: return _straightHorizontal;
                     }
                     break;
                 case (SectionTypes.RightCorner):
                     switch (rotation) {
-                        case Rotation.EastWest: return _cornerNw;
+                        case Rotation.WestEast: return _cornerNw;
                         case Rotation.NorthSouth: return _cornerSw;
-                        case Rotation.WestEast: return _cornerSe;
+                        case Rotation.EastWest: return _cornerSe;
                         case Rotation.SouthNorth: return _cornerNe;
                     }
                     break;
                 case (SectionTypes.StartGrid):
                     switch (rotation) {
-                        case Rotation.EastWest: return _startGridHorizontal;
-                        case Rotation.NorthSouth: return _startGridVertical;
                         case Rotation.WestEast: return _startGridHorizontal;
-                        case Rotation.SouthNorth: return _startGridVertical;
+                        //case Rotation.NorthSouth: return _startGridVertical;
+                        case Rotation.EastWest: return _startGridHorizontal;
+                        //case Rotation.SouthNorth: return _startGridVertical;
                     }
                     break;
                 case (SectionTypes.Finish):
                     switch (rotation) {
-                        case Rotation.EastWest: return _finishHorizontal;
-                        case Rotation.NorthSouth: return _finishVertical;
                         case Rotation.WestEast: return _finishHorizontal;
+                        case Rotation.NorthSouth: return _finishVertical;
+                        case Rotation.EastWest: return _finishHorizontal;
                         case Rotation.SouthNorth: return _finishVertical;
                     }
                     break;
             }
-            throw new Exception("Invalid gridType");
+            return null;
         }
 
         
