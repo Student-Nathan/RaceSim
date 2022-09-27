@@ -31,21 +31,28 @@ namespace Controller {
 
         public void assignStart() {
             List<Section> starts = new List<Section>();
+            int startNR=0;
             foreach (Section section in Track.Sections) {
-                if (section.Equals(SectionTypes.StartGrid)) {
+                if (section.SectionType.Equals(SectionTypes.StartGrid)) {
                     starts.Add(section);
+                    Console.WriteLine("added");
                 }
             }
-            for(int i = 0; i<starts.Count(); i++) {
-                if (i > Participants.Count) {
+            for(int i = 0; i<Participants.Count(); i++) {
+                if (i > starts.Count*2) {
                     return;
                 }
                 if (i%2 == 0) {
-                    getSectionData(starts[i]).Left = Participants[i];
+                    getSectionData(starts[startNR]).Left = Participants[i];
                 } else {
-                    getSectionData(starts[i]).Right = Participants[i];
+                    Console.WriteLine(i);
+                    getSectionData(starts[startNR]).Right = Participants[i];
                 }
-                _positions[starts[i]] = getSectionData(starts[i]);
+                
+                _positions[starts[startNR]] = getSectionData(starts[startNR]);
+                if (i % 2 == 1) {
+                    startNR++;
+                }
             }
         }
     }

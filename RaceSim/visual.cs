@@ -62,7 +62,7 @@ namespace RaceSim {
                 foreach (String sectionPart in getGraphics(section, rotation)) {//draws every part of a sectionType
                     Console.SetCursorPosition(posX, posY);
                     posY += 1;
-                    Console.WriteLine(sectionPart);
+                    Console.WriteLine(replacePlaceholders(sectionPart,Data.currentRace.getSectionData(section).Left, Data.currentRace.getSectionData(section).Right));
                 }
                 posY -= graphicLength;
                 switch (section.SectionType) {//switch to rotate every section properly and compensate for the empty sectiontype
@@ -167,6 +167,19 @@ namespace RaceSim {
             return null;
         }
 
+        public static String replacePlaceholders(String sectionPart, IParticipant left, IParticipant right) {
+            if (left != null) {
+                sectionPart= sectionPart.Replace("1", left.Name[0].ToString());
+            } else {
+                sectionPart = sectionPart.Replace("1", " ");
+            }
+            if (right != null) {
+                sectionPart = sectionPart.Replace("2", right.Name[0].ToString());
+            } else {
+                sectionPart = sectionPart.Replace("2", " ");
+            }
+            return sectionPart;
+        }
         
     }
     //plan van aanpak:

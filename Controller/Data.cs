@@ -19,7 +19,7 @@ namespace Controller{
         public static void addParticipants() {
             Driver driver1 = new Driver("TestDriver",TeamColor.Red);
             Competition.Participants.Add(driver1);
-            Driver driver2 = new Driver("TestDriver2",TeamColor.Green);
+            Driver driver2 = new Driver("DestDriver2",TeamColor.Green);
             Competition.Participants.Add(driver2);
         }
 
@@ -36,12 +36,8 @@ namespace Controller{
         
 
         public static void addTracks() {
-            SectionTypes[] sectionTypes = new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.LeftCorner };
-            Track track1 = new Track("testTrack", sectionTypes);
-            sectionTypes = new SectionTypes[] { SectionTypes.StartGrid, SectionTypes.LeftCorner };
-            Track track2 = new Track("test2", sectionTypes);
+            Track track1 = new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight });
             Competition.Tracks.Enqueue(track1);
-            Competition.Tracks.Enqueue(track2);
         }
     }
 }
