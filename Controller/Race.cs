@@ -45,6 +45,7 @@ namespace Controller {
                 } else {
                     getSectionData(starts[i]).Right = Participants[i];
                 }
+                _positions[starts[i]] = getSectionData(starts[i]);
             }
         }
     }
