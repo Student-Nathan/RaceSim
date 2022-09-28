@@ -42,7 +42,6 @@ namespace Controller {
             foreach (Section section in Track.Sections) {
                 if (section.SectionType.Equals(SectionTypes.StartGrid)) {
                     starts.Add(section);
-                    Console.WriteLine("added");
                 }
             }
             for(int i = 0; i<Participants.Count(); i++) {
@@ -52,7 +51,6 @@ namespace Controller {
                 if (i%2 == 0) {
                     getSectionData(starts[startNR]).Left = Participants[i];
                 } else {
-                    Console.WriteLine(i);
                     getSectionData(starts[startNR]).Right = Participants[i];
                 }
                 
