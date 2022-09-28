@@ -21,6 +21,7 @@ namespace Controller{
             Competition.Participants.Add(driver1);
             Driver driver2 = new Driver("DestDriver2",TeamColor.Green);
             Competition.Participants.Add(driver2);
+            Competition.Participants.Add(driver1);
         }
 
         public static void nextRace() {

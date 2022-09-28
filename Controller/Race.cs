@@ -45,7 +45,7 @@ namespace Controller {
                 }
             }
             for(int i = 0; i<Participants.Count(); i++) {
-                if (i > starts.Count*2) {
+                if (i+1 > starts.Count*2) {
                     return;
                 }
                 if (i%2 == 0) {
