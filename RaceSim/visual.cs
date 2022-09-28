@@ -19,22 +19,22 @@ namespace RaceSim {
         #region graphics
         //todo: add own graphics
         //let op: als graphics aangepast worden, verander dan ook graphicLength
-        private static string[] _finishHorizontal = { "----", "  1# ", "  2# ", "----" };
-        private static string[] _finishVertical = { };
+        private static readonly string[] _finishHorizontal = { "----", " 1# ", " 2# ", "----" };
+        private static readonly string[] _finishVertical = { };
 
-        private static string[] _straightHorizontal = {"----"," 1 "," 2 ","----" };
-        private static string[] _straightVertical = {" |  |"," |12|"," |  |"," |  |" };
+        private static readonly string[] _straightHorizontal = {"----","  1 ","  2 ","----" };
+        private static readonly string[] _straightVertical = {"|  |","|12|","|  |","|  |" };
 
         
-        private static string[] _cornerNe = { @" /--", @"/1  ", @"| 2 ", @"|  /" };//boven links
-        private static string[] _cornerNw = { @"---\", @"  1 \", @" 2  |", @"\   |" };//boven rechts
-        private static string[] _cornerSe = { @"|  \", @"| 1 ", @"\2  ", @" \--" };//onder rechts
-        private static string[] _cornerSw = { @"/  |", @" 1 |", @"  2/", @"--/ " };//onder links
+        private static readonly string[] _cornerNe = { @" /--", @"/1  ", @"| 2 ", @"|  /" };//boven links
+        private static readonly string[] _cornerNw = { @"--\", @" 1 \", @"2  |", @"\  |" };//boven rechts
+        private static readonly string[] _cornerSe = { @"|  \", @"| 1 ", @"\2  ", @" \--" };//onder rechts
+        private static readonly string[] _cornerSw = { @"/  |", @" 1 |", @"  2/", @"--/ " };//onder links
 
-        private static string[] _startGridHorizontal = { "----", " 1] ", " 2]  ", "----" };
-        //private static string[] _startGridVertical = { @"|⎵ ⎵ |" };
+        private static readonly string[] _startGridHorizontal = { "----", " 1] ", " 2]  ", "----" };
+        private static readonly string[] _startGridVertical = { @"|⎵ ⎵ |" };
 
-        private static string[] _empty = {"    ", "    ", "    ", "    "};
+        private static readonly string[] _empty = {"    ", "    ", "    ", "    "};
 
 
         #endregion
@@ -56,7 +56,6 @@ namespace RaceSim {
                 case 3: rotation = Rotation.SouthNorth; break;
             }
             resetTrack();
-            Boolean first = true;
             Console.WriteLine(track.Name);
             foreach (Section section in track.Sections) {
                 foreach (String sectionPart in getGraphics(section, rotation)) {//draws every part of a sectionType
@@ -164,7 +163,7 @@ namespace RaceSim {
                     }
                     break;
             }
-            return null;
+            throw new Exception("No graphic found");
         }
 
         public static String replacePlaceholders(String sectionPart, IParticipant left, IParticipant right) {

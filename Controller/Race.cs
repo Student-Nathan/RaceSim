@@ -1,4 +1,6 @@
 ﻿using Model;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace Controller {
     public class Race {
@@ -7,12 +9,17 @@ namespace Controller {
         public DateTime StartTime { get; set; }
         private Random _random;
         private Dictionary<Section, SectionData> _positions;
+        private Timer _timer;
+        public event ElapsedEventHandler OnTimedEvent;
 
         public Race(Track track, List<IParticipant> participants){
             Track = track;
             Participants = participants;
             _positions = new Dictionary<Section, SectionData>();
             _random = new Random(DateTime.Now.Millisecond);
+            _timer = new Timer();
+            _timer.Interval = 500;
+            _timer.Elapsed += OnTimedEvent;
             assignStart();
         }
         public SectionData getSectionData(Section section) {
