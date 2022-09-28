@@ -1,4 +1,6 @@
 ﻿using Model;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace Controller {
     public class Race {
@@ -7,24 +9,55 @@ namespace Controller {
         public DateTime StartTime { get; set; }
         private Random _random;
         private Dictionary<Section, SectionData> _positions;
+        private Timer _timer;
+        public event ElapsedEventHandler OnTimedEvent;
 
         public Race(Track track, List<IParticipant> participants){
             Track = track;
             Participants = participants;
             _positions = new Dictionary<Section, SectionData>();
-            _random = new Random(DateTime.Now.Millisecond);  
+            _random = new Random(DateTime.Now.Millisecond);
+            _timer = new Timer();
+            _timer.Interval = 500;
+            _timer.Elapsed += OnTimedEvent;
+            assignStart();
         }
         public SectionData getSectionData(Section section) {
             if (!_positions.ContainsKey(section)) {
                 _positions[section] = new SectionData();
             }
             return _positions[section];
-        }//voor in college: vraag naar constructors
+        }
 
         public void RandomizeEquipment() {
-            foreach (var participant in Participants) {
+            foreach (IParticipant participant in Participants) {
                 participant.Equipment.Quality = _random.Next(1,20);
                 participant.Equipment.Performance = _random.Next(1,20);
+            }
+        }
+
+        public void assignStart() {
+            List<Section> starts = new List<Section>();
+            int startNR=0;
+            foreach (Section section in Track.Sections) {
+                if (section.SectionType.Equals(SectionTypes.StartGrid)) {
+                    starts.Add(section);
+                }
+            }
+            for(int i = 0; i<Participants.Count(); i++) {
+                if (i > starts.Count*2) {
+                    return;
+                }
+                if (i%2 == 0) {
+                    getSectionData(starts[startNR]).Left = Participants[i];
+                } else {
+                    getSectionData(starts[startNR]).Right = Participants[i];
+                }
+                
+                _positions[starts[startNR]] = getSectionData(starts[startNR]);
+                if (i % 2 == 1) {
+                    startNR++;
+                }
             }
         }
     }
