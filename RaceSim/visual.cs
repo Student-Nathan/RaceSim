@@ -7,13 +7,20 @@ using Model;
 using Controller;
 
 namespace RaceSim {
+    public enum Rotation {
+        WestEast, //links naar rechts
+        NorthSouth, //boven naar beneden
+        EastWest, //rechts naar links
+        SouthNorth, //beneden naar boven
+
+    }
     public static class Visual {
         private static Rotation rotation;
         private static int posX;
         private static int posY;
         private static int graphicLength=4;
         public static void initialize() {
-            
+            Data.currentRace.DriversChanged += OnDriversChanged;
         }
 
         #region graphics
@@ -39,12 +46,10 @@ namespace RaceSim {
 
         #endregion
 
-        public enum Rotation {
-            WestEast, //links naar rechts
-            NorthSouth, //boven naar beneden
-            EastWest, //rechts naar links
-            SouthNorth, //beneden naar boven
 
+
+        public static void drawTrack(Track track) {
+            drawTrack(track, 3);
         }
 
         public static void drawTrack(Track track, int rotationINT) {
@@ -179,7 +184,10 @@ namespace RaceSim {
             }
             return sectionPart;
         }
-        
+
+        private static void OnDriversChanged(object sender, DriversChangedEventArgs e) {
+            drawTrack(e.Track);
+        }
     }
     //plan van aanpak:
     //1. foreach met alle sectiontypes van track
