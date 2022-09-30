@@ -48,13 +48,11 @@ namespace RaceSim {
 
 
 
-        public static void drawTrack(Track track) {
-            drawTrack(track, 3);
-        }
+ 
 
-        public static void drawTrack(Track track, int rotationINT) {
+        public static void drawTrack(Track track) {
             
-            switch (rotationINT) {
+            switch (track.rotationINT) {
                 case 0: rotation = Rotation.WestEast; break;
                 case 1: rotation = Rotation.NorthSouth; break;
                 case 2: rotation = Rotation.EastWest; break;

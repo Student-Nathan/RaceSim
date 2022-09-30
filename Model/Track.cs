@@ -9,10 +9,12 @@ namespace Model {
     public class Track {
         public String Name;
         public LinkedList<Section> Sections;
+        public int rotationINT;
 
-        public Track(String name, SectionTypes[] sections) {
+        public Track(String name, SectionTypes[] sections, int rotationINT) {
             Name = name;
             Sections = convertSections(sections);
+            this.rotationINT = rotationINT;
                      
         }
         private LinkedList<Section> convertSections(SectionTypes[] sections) {

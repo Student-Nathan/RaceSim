@@ -88,6 +88,7 @@ namespace Controller {
         //3.1 zoek door de track naar de index van de huidige sectie en tel daar 1 bij op
         //4. stop de deelnemer in de goede sectiedata
 
+        //bug: gooit exeption wanneer drivers na een lap weer bij elkaar komen
         private Section searchPositions(IParticipant participant) {
             foreach (Section section in Data.currentRace.Track.Sections) {
                 if (getSectionData(section).Left is not null) {
