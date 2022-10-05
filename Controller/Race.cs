@@ -15,8 +15,9 @@ namespace Controller {
         public event EventHandler<DriversChangedEventArgs> DriversChanged;
         private int[] afgelegdeAfstanden;
         private int competitors;
+        private int Threshold = 100;
 
-        public Race(Track track, List<IParticipant> participants){
+        public Race(Track track, List<IParticipant> participants) {
             Track = track;
             Participants = participants;
             _positions = new Dictionary<Section, SectionData>();
@@ -26,7 +27,7 @@ namespace Controller {
             _timer.Elapsed += OnTimedEvent;
             assignStart();
             afgelegdeAfstanden = new int[competitors];
-            for(int i = 0; i < competitors; i++) {
+            for (int i = 0; i < competitors; i++) {
                 afgelegdeAfstanden[i] = 0;
             }
             start();
@@ -40,34 +41,31 @@ namespace Controller {
 
         public void RandomizeEquipment() {
             foreach (IParticipant participant in Participants) {
-                participant.Equipment.Quality = _random.Next(1,20);
-                participant.Equipment.Performance = _random.Next(1,20);
-                participant.Equipment.Speed = _random.Next(1,20);
-                //participant.Equipment.Quality = 10;
-                //participant.Equipment.Performance = 10;
-                //participant.Equipment.Speed = 10;
+                participant.Equipment.Quality = _random.Next(1, 5);
+                participant.Equipment.Performance = _random.Next(5, 10);
+                participant.Equipment.Speed = _random.Next(5, 10);
             }
         }
 
         public void assignStart() {
             List<Section> starts = new List<Section>();
-            int startNR=0;
+            int startNR = 0;
             foreach (Section section in Track.Sections) {
                 if (section.SectionType.Equals(SectionTypes.StartGrid)) {
                     starts.Add(section);
                 }
             }
-            for(int i = 0; i<Participants.Count(); i++) {
-                if (i+1 > starts.Count*2) {
+            for (int i = 0; i < Participants.Count(); i++) {
+                if (i + 1 > starts.Count * 2) {
                     return;
                 }
-                if (i%2 == 0) {
+                if (i % 2 == 0) {
                     getSectionData(starts[startNR]).Left = Participants[i];
                 } else {
                     getSectionData(starts[startNR]).Right = Participants[i];
                 }
                 competitors++;
-                
+
                 _positions[starts[startNR]] = getSectionData(starts[startNR]);
                 if (i % 2 == 1) {
                     startNR++;
@@ -91,81 +89,132 @@ namespace Controller {
         //bug: gooit exeption wanneer drivers na een lap weer bij elkaar komen
         private Section searchPositions(IParticipant participant) {
             foreach (Section section in Data.currentRace.Track.Sections) {
-                if (getSectionData(section).Left is not null) {
-                    if (getSectionData(section).Left.Equals(participant)) {
+                SectionData sectionData = getSectionData(section);
+                if (sectionData.Left is not null) {
+                    if (sectionData.Left.Equals(participant)) {
                         return section;
                     }
-                } else if (getSectionData(section).Right is not null) {
-                    if (getSectionData(section).Right.Equals(participant)) {
+                } else if (sectionData.Right is not null) {
+                    if (sectionData.Right.Equals(participant)) {
                         return section;
                     }
                 }
             }
             throw new Exception("Participant not found");
+        }
+
+        private Section findNextSection(Section section,int sections) {
+            int newIndex = findIndex(section) + sections;
+            if(newIndex >= Track.Sections.Count) {
+                newIndex -= Track.Sections.Count;
+            }
+            Section next = Track.Sections.ElementAt(newIndex);
+            int i = 1;
+            while(getSectionData(next).Left is not null && getSectionData(next).Right is not null) {
+                if (i > sections) {
+                    return section;
+                } else {
+                    newIndex -= i;
+                    if (newIndex < 0) {
+                        newIndex = Track.Sections.Count + newIndex;
+                    }
+                    next = Track.Sections.ElementAt(newIndex);
+                    i++;
+                }
+            }
+            return next;
+
+            //LinkedListNode<Section> temp = Track.Sections.Find(section);
+
+            //Section next = section;
+            //for (int i = 0; i < sections; i++) {
+            //    try {
+            //        next = temp.Next.Value;
+            //    } catch (NullReferenceException) {
+            //        temp = Track.Sections.First;
+            //        next = temp.Value;
+            //    }
+            //}
+            //SectionData nextData = getSectionData(next);
+            //if (nextData.Left is not null && nextData.Right is not null) {
+
+            //}
+        }
+
+        private int findIndex(Section section) {
+            int i = 0;
+            foreach(Section loopSection in Track.Sections) {
+                if (loopSection.Equals(section)) {
+                    break;
+                }
+                i++;
+            }
+            return i;
+        }
+        //functie die de driver plaatst in de volgende sectie. 
+        //driver wordt altijd op links geplaatst tenzij er een ander in dezelfde sectie staat
+        private void placeDriverData(Section section, IParticipant driver, int distance) {
+            SectionData data = getSectionData(section);
+            if (data.Left is null) {
+                data.Left = driver;
+                data.DistanceLeft = distance;
+            } else if(data.Right is null){
+                data.Right = driver;
+                data.DistanceRight = distance;
+            } else {
+                throw new Exception("Geen plaats in Sectie");
+            }
+        }
+        //functie die de driver weghaalt van de oude positie
+        private void removeDriverData(SectionData data, Boolean left) {
+            if (left) {
+                data.Left = null;
+                data.DistanceLeft = 0;
+            } else {
+                data.Right = null;
+                data.DistanceRight = 0;
+            }
 
         }
 
+        //timer event
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e) {
             Boolean driversChanged = false;
-            for (int i = 0; i < competitors; i++) {//itterates for every driver that is actually participating
-                //code to add the meters a driver makes in 1 "turn"
-                afgelegdeAfstanden[i] += (Data.Competition.Participants[i].Equipment.Performance * Data.Competition.Participants[i].Equipment.Speed);
-                //moves the driver to the next section when threshold is reached (100 m by default)
-                if (afgelegdeAfstanden[i] > 100) {
-                    int sections = afgelegdeAfstanden[i] / 100; //berekent hoeveel sections een driver mag verplaatsen
-                    afgelegdeAfstanden[i] -= 100 * sections; //haalt het aantal sections van de gereden afstand af
-                    Section currentSection = searchPositions(Data.Competition.Participants[i]);
-                    Section nextSection = new Section(SectionTypes.Straight); //variable with placeholder value
-                    
-                    //code to find the next section the driver is on
-                    for (int j = 0; j < sections; j++) {
-                        LinkedListNode<Section> temp = Track.Sections.Find(currentSection).Next;
+            Section nextSection;
 
-                        try {
-                            nextSection = temp.Value;
-                        } catch (NullReferenceException) {//if the driver has reached the end of the list of sections, go to the first in the list
-                            temp = Track.Sections.First;
-                            nextSection = temp.Value;
-                        }
+            //doorloopt alle secties in de race
+            foreach (Section section in Track.Sections) {
+                SectionData sectionData = getSectionData(section);
+                if (sectionData.Left is not null) { //wanneer er een driver op de linker positie staat
+                    //berekening voor het vooruitgaan
+                    sectionData.DistanceLeft += (sectionData.Left.Equipment.Performance * sectionData.Left.Equipment.Speed);
+                    if (sectionData.DistanceLeft >= Threshold) {//wanneer de driver naar de volgende moet worden verplaatst
+                        int sections = (int)sectionData.DistanceLeft / Threshold;//berekent de hoeveelheid secties die de driver naar voren moet
+                        nextSection = findNextSection(section, sections);//zoekt de volgende sectie
+                        int newDistance = (int)(sectionData.DistanceLeft - (Threshold * sections));//berekent de 
+                        placeDriverData(nextSection, sectionData.Left, newDistance);
+                        removeDriverData(sectionData, true);
+                        driversChanged = true;
                     }
-
-                    //part that removes the participant from the section their are currently on
-                    if (getSectionData(currentSection).Left is not null) {
-                        if (getSectionData(currentSection).Left.Equals(Data.Competition.Participants[i])) {
-                            getSectionData(currentSection).Left = null;
-                        }
-                    } else if (getSectionData(currentSection).Right is not null) {
-                        if (getSectionData(currentSection).Right.Equals(Data.Competition.Participants[i])) {
-                            getSectionData(currentSection).Right = null;
-                        }
+                }
+                if (sectionData.Right is not null) {
+                    sectionData.DistanceRight += (sectionData.Right.Equipment.Performance * sectionData.Right.Equipment.Speed);
+                    if (sectionData.DistanceRight >= Threshold) {
+                        int sections = (int)sectionData.DistanceRight / Threshold;
+                        nextSection = findNextSection(section, sections);
+                        int newDistance = (int)(sectionData.DistanceRight - (Threshold * sections));
+                        placeDriverData(nextSection, sectionData.Right, newDistance);
+                        removeDriverData(sectionData, false);
+                        driversChanged = true;
                     }
-
-                    //part that places the participant on the next available section
-                    Boolean changed = false;
-                    while (!changed) {//if the next section is occupied the participant will be placed in the next available spot (searches in previous sections)
-                        if (getSectionData(nextSection).Left is null) {
-                            getSectionData(nextSection).Left = Data.Competition.Participants[i];
-                            changed = true;
-                        } else if (getSectionData(nextSection).Right is null) {
-                            getSectionData(nextSection).Right = Data.Competition.Participants[i];
-                            changed = true;
-                        } else {//part that finds the previous section in case the section is full
-                            LinkedListNode<Section> temp = Track.Sections.Find(nextSection).Previous;
-                            if (temp is null) {
-                                temp = Track.Sections.Last;
-                                nextSection = temp.Value;
-                            } else {
-                                nextSection = temp.Value;
-                            }
-                        }
-                    }
-                    driversChanged = true;
                 }
             }
             if (driversChanged) {
                 DriversChanged.Invoke(this, new DriversChangedEventArgs(Data.currentRace.Track));//raises the driversChanged event
             }
         }
-        #endregion
     }
 }
+        #endregion
+
+    
