@@ -24,10 +24,12 @@ namespace RaceSim {
         }
 
         #region graphics
-        //todo: add own graphics
         //let op: als graphics aangepast worden, verander dan ook graphicLength
-        private static readonly string[] _finishHorizontal = { "----", " 1# ", " 2# ", "----" };
-        private static readonly string[] _finishVertical = { };
+        private static readonly string[] _finishWE = { "----", "|1# ", "|2# ", "----" };
+        private static readonly string[] _finishEW = { "----", " #1|", " #2|", "----" };
+        private static readonly string[] _finishSN = {"|--|","|21|","|##|","|  |" };
+        private static readonly string[] _finishNS = {"|--|","|##|","|12|","|  |" };
+
 
         private static readonly string[] _straightHorizontal = {"----","  1 ","  2 ","----" };
         private static readonly string[] _straightVertical = {"|  |","|12|","|  |","|  |" };
@@ -38,8 +40,11 @@ namespace RaceSim {
         private static readonly string[] _cornerSe = { @"|  \", @"| 1 ", @"\2  ", @" \--" };//onder rechts
         private static readonly string[] _cornerSw = { @"/  |", @" 1 |", @"  2/", @"--/ " };//onder links
 
-        private static readonly string[] _startGridHorizontal = { "----", " 1] ", " 2]  ", "----" };
-        private static readonly string[] _startGridVertical = { @"|⎵ ⎵ |" };
+        private static readonly string[] _startGridWE = { "----", " 1] ", " 2]  ", "----" };
+        private static readonly string[] _startGridEW = { "----", " [1 ", " [2  ", "----" };
+        private static readonly string[] _startGridNS = { "|  |","|21|", "|__|","|  |" };
+        private static readonly string[] _startGridSN = { "|  |", "|‾‾|", "|12|", "|  |" };
+
 
         private static readonly string[] _empty = {"    ", "    ", "    ", "    "};
 
@@ -151,18 +156,18 @@ namespace RaceSim {
                     break;
                 case (SectionTypes.StartGrid):
                     switch (rotation) {
-                        case Rotation.WestEast: return _startGridHorizontal;
-                        //case Rotation.NorthSouth: return _startGridVertical;
-                        case Rotation.EastWest: return _startGridHorizontal;
-                        //case Rotation.SouthNorth: return _startGridVertical;
+                        case Rotation.WestEast: return _startGridWE;
+                        case Rotation.NorthSouth: return _startGridNS;
+                        case Rotation.EastWest: return _startGridEW;
+                        case Rotation.SouthNorth: return _startGridSN;
                     }
                     break;
                 case (SectionTypes.Finish):
                     switch (rotation) {
-                        case Rotation.WestEast: return _finishHorizontal;
-                        case Rotation.NorthSouth: return _finishVertical;
-                        case Rotation.EastWest: return _finishHorizontal;
-                        case Rotation.SouthNorth: return _finishVertical;
+                        case Rotation.WestEast: return _finishWE;
+                        case Rotation.NorthSouth: return _finishNS;
+                        case Rotation.EastWest: return _finishEW;
+                        case Rotation.SouthNorth: return _finishSN;
                     }
                     break;
             }

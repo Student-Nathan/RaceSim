@@ -30,7 +30,7 @@ namespace Controller {
             for (int i = 0; i < competitors; i++) {
                 afgelegdeAfstanden[i] = 0;
             }
-            start();
+            //start();
         }
         public SectionData getSectionData(Section section) {
             if (!_positions.ContainsKey(section)) {
@@ -103,14 +103,14 @@ namespace Controller {
             throw new Exception("Participant not found");
         }
 
-        private Section findNextSection(Section section,int sections) {
+        private Section findNextSection(Section section, int sections) {
             int newIndex = findIndex(section) + sections;
-            if(newIndex >= Track.Sections.Count) {
+            if (newIndex >= Track.Sections.Count) {
                 newIndex -= Track.Sections.Count;
             }
             Section next = Track.Sections.ElementAt(newIndex);
             int i = 1;
-            while(getSectionData(next).Left is not null && getSectionData(next).Right is not null) {
+            while (getSectionData(next).Left is not null && getSectionData(next).Right is not null) {
                 if (i > sections) {
                     return section;
                 } else {
@@ -123,22 +123,6 @@ namespace Controller {
                 }
             }
             return next;
-
-            //LinkedListNode<Section> temp = Track.Sections.Find(section);
-
-            //Section next = section;
-            //for (int i = 0; i < sections; i++) {
-            //    try {
-            //        next = temp.Next.Value;
-            //    } catch (NullReferenceException) {
-            //        temp = Track.Sections.First;
-            //        next = temp.Value;
-            //    }
-            //}
-            //SectionData nextData = getSectionData(next);
-            //if (nextData.Left is not null && nextData.Right is not null) {
-
-            //}
         }
 
         private int findIndex(Section section) {
