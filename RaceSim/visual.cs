@@ -7,20 +7,35 @@ using Model;
 using Controller;
 
 namespace RaceSim {
+    public enum Rotation {
+        WestEast, //links naar rechts
+        NorthSouth, //boven naar beneden
+        EastWest, //rechts naar links
+        SouthNorth, //beneden naar boven
+
+    }
     public static class Visual {
         private static Rotation rotation;
         private static int posX;
         private static int posY;
         private static int graphicLength=4;
         public static void initialize() {
-            
+            Data.currentRace.DriversChanged += OnDriversChanged;
+        }
+
+        public static void OnNextRaceEvent(object sender, NextRaceArgs e) {
+            Console.WriteLine("test");
+            initialize();
+            drawTrack(e.race.Track);
         }
 
         #region graphics
-        //todo: add own graphics
         //let op: als graphics aangepast worden, verander dan ook graphicLength
-        private static readonly string[] _finishHorizontal = { "----", " 1# ", " 2# ", "----" };
-        private static readonly string[] _finishVertical = { };
+        private static readonly string[] _finishWE = { "----", "|1# ", "|2# ", "----" };
+        private static readonly string[] _finishEW = { "----", " #1|", " #2|", "----" };
+        private static readonly string[] _finishSN = {"|--|","|21|","|##|","|  |" };
+        private static readonly string[] _finishNS = {"|--|","|##|","|12|","|  |" };
+
 
         private static readonly string[] _straightHorizontal = {"----","  1 ","  2 ","----" };
         private static readonly string[] _straightVertical = {"|  |","|12|","|  |","|  |" };
@@ -31,25 +46,24 @@ namespace RaceSim {
         private static readonly string[] _cornerSe = { @"|  \", @"| 1 ", @"\2  ", @" \--" };//onder rechts
         private static readonly string[] _cornerSw = { @"/  |", @" 1 |", @"  2/", @"--/ " };//onder links
 
-        private static readonly string[] _startGridHorizontal = { "----", " 1] ", " 2]  ", "----" };
-        private static readonly string[] _startGridVertical = { @"|⎵ ⎵ |" };
+        private static readonly string[] _startGridWE = { "----", " 1] ", " 2]  ", "----" };
+        private static readonly string[] _startGridEW = { "----", " [1 ", " [2  ", "----" };
+        private static readonly string[] _startGridNS = { "|  |","|21|", "|__|","|  |" };
+        private static readonly string[] _startGridSN = { "|  |", "|‾‾|", "|12|", "|  |" };
+
 
         private static readonly string[] _empty = {"    ", "    ", "    ", "    "};
 
 
         #endregion
 
-        public enum Rotation {
-            WestEast, //links naar rechts
-            NorthSouth, //boven naar beneden
-            EastWest, //rechts naar links
-            SouthNorth, //beneden naar boven
 
-        }
 
-        public static void drawTrack(Track track, int rotationINT) {
+ 
+
+        public static void drawTrack(Track track) {
             
-            switch (rotationINT) {
+            switch (track.rotationINT) {
                 case 0: rotation = Rotation.WestEast; break;
                 case 1: rotation = Rotation.NorthSouth; break;
                 case 2: rotation = Rotation.EastWest; break;
@@ -148,18 +162,18 @@ namespace RaceSim {
                     break;
                 case (SectionTypes.StartGrid):
                     switch (rotation) {
-                        case Rotation.WestEast: return _startGridHorizontal;
-                        //case Rotation.NorthSouth: return _startGridVertical;
-                        case Rotation.EastWest: return _startGridHorizontal;
-                        //case Rotation.SouthNorth: return _startGridVertical;
+                        case Rotation.WestEast: return _startGridWE;
+                        case Rotation.NorthSouth: return _startGridNS;
+                        case Rotation.EastWest: return _startGridEW;
+                        case Rotation.SouthNorth: return _startGridSN;
                     }
                     break;
                 case (SectionTypes.Finish):
                     switch (rotation) {
-                        case Rotation.WestEast: return _finishHorizontal;
-                        case Rotation.NorthSouth: return _finishVertical;
-                        case Rotation.EastWest: return _finishHorizontal;
-                        case Rotation.SouthNorth: return _finishVertical;
+                        case Rotation.WestEast: return _finishWE;
+                        case Rotation.NorthSouth: return _finishNS;
+                        case Rotation.EastWest: return _finishEW;
+                        case Rotation.SouthNorth: return _finishSN;
                     }
                     break;
             }
@@ -168,18 +182,29 @@ namespace RaceSim {
 
         public static String replacePlaceholders(String sectionPart, IParticipant left, IParticipant right) {
             if (left != null) {
-                sectionPart= sectionPart.Replace("1", left.Name[0].ToString());
+                if (left.Equipment.IsBroken) {
+                    sectionPart = sectionPart.Replace("1", "X");
+                } else {
+                    sectionPart = sectionPart.Replace("1", left.Name[0].ToString());
+                }
             } else {
                 sectionPart = sectionPart.Replace("1", " ");
             }
             if (right != null) {
-                sectionPart = sectionPart.Replace("2", right.Name[0].ToString());
+                if (right.Equipment.IsBroken) {
+                    sectionPart = sectionPart.Replace("2", "X");
+                } else {
+                    sectionPart = sectionPart.Replace("2", right.Name[0].ToString());
+                }
             } else {
                 sectionPart = sectionPart.Replace("2", " ");
             }
             return sectionPart;
         }
-        
+
+        private static void OnDriversChanged(object sender, DriversChangedEventArgs e) {
+            drawTrack(e.Track);
+        }
     }
     //plan van aanpak:
     //1. foreach met alle sectiontypes van track
