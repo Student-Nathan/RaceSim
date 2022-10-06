@@ -23,6 +23,12 @@ namespace RaceSim {
             Data.currentRace.DriversChanged += OnDriversChanged;
         }
 
+        public static void OnNextRaceEvent(object sender, NextRaceArgs e) {
+            Console.WriteLine("test");
+            initialize();
+            drawTrack(e.race.Track);
+        }
+
         #region graphics
         //let op: als graphics aangepast worden, verander dan ook graphicLength
         private static readonly string[] _finishWE = { "----", "|1# ", "|2# ", "----" };
@@ -176,12 +182,20 @@ namespace RaceSim {
 
         public static String replacePlaceholders(String sectionPart, IParticipant left, IParticipant right) {
             if (left != null) {
-                sectionPart= sectionPart.Replace("1", left.Name[0].ToString());
+                if (left.Equipment.IsBroken) {
+                    sectionPart = sectionPart.Replace("1", "X");
+                } else {
+                    sectionPart = sectionPart.Replace("1", left.Name[0].ToString());
+                }
             } else {
                 sectionPart = sectionPart.Replace("1", " ");
             }
             if (right != null) {
-                sectionPart = sectionPart.Replace("2", right.Name[0].ToString());
+                if (right.Equipment.IsBroken) {
+                    sectionPart = sectionPart.Replace("2", "X");
+                } else {
+                    sectionPart = sectionPart.Replace("2", right.Name[0].ToString());
+                }
             } else {
                 sectionPart = sectionPart.Replace("2", " ");
             }

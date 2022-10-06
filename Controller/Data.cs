@@ -10,6 +10,7 @@ namespace Controller{
     public static class Data {
         public static Competition? Competition;
         public static Race ?currentRace;
+        public static event EventHandler<NextRaceArgs> nextRaceEvent;
 
         public static void Initialize() {
             Competition = new Competition();
@@ -26,14 +27,17 @@ namespace Controller{
         }
 
         public static void nextRace() {
+            currentRace?.Cleanup();
             Track next = Competition.NextTrack();
             if (next != null) {
                 Race race1 = new Race(next, Competition.Participants);
                 race1.RandomizeEquipment();
-               currentRace = race1;
+                currentRace = race1;
+                nextRaceEvent.Invoke(null, new NextRaceArgs(currentRace));
             } else {
                 currentRace = null;
             }
+            
         }
         
 
@@ -41,6 +45,9 @@ namespace Controller{
             //Track track1 = new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish }, 3);
             Track track1 = new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Straight },3);
             Competition.Tracks.Enqueue(track1);
+            Track track2 = new Track("test 5", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Straight }, 3);
+            Competition.Tracks.Enqueue(track2);
+
         }
     }
 }
