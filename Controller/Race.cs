@@ -1,5 +1,6 @@
 ﻿using Model;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Timers;
 using Timer = System.Timers.Timer;
@@ -163,6 +164,7 @@ namespace Controller {
         //timer event
         private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e) {
             Boolean driversChanged = false;
+            Boolean everyoneFinished = true;
             Section nextSection;
 
             //doorloopt alle secties in de race
@@ -170,6 +172,7 @@ namespace Controller {
                 SectionData sectionData = getSectionData(section);
                 if (sectionData.Left is not null) { //wanneer er een driver op de linker positie staat
                     //berekening voor het vooruitgaan
+                    everyoneFinished = false;
                     sectionData.DistanceLeft += (sectionData.Left.Equipment.Performance * sectionData.Left.Equipment.Speed);
                     if (sectionData.DistanceLeft >= Threshold) {//wanneer de driver naar de volgende moet worden verplaatst
                         int sections = (int)sectionData.DistanceLeft / Threshold;//berekent de hoeveelheid secties die de driver naar voren moet
@@ -182,6 +185,7 @@ namespace Controller {
                 }
                 if (sectionData.Right is not null) {//zelfde, maar dan voor rechts
                     sectionData.DistanceRight += (sectionData.Right.Equipment.Performance * sectionData.Right.Equipment.Speed);
+                    everyoneFinished = false;
                     if (sectionData.DistanceRight >= Threshold) {
                         int sections = (int)sectionData.DistanceRight / Threshold;
                         nextSection = findNextSection(section, sections);
@@ -195,8 +199,16 @@ namespace Controller {
             if (driversChanged) {
                 DriversChanged.Invoke(this, new DriversChangedEventArgs(Data.currentRace.Track));//raises the driversChanged event
             }
+            if (everyoneFinished) {
+                Cleanup();
+            }
         }
         #endregion
+        public void Cleanup() {
+            _timer.Stop();
+            Console.Clear();
+            DriversChanged = null;
+        }
     }
 }
         
