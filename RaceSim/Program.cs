@@ -2,11 +2,13 @@
 using Model;
 using RaceSim;
 using System.ComponentModel;
+using WPF;
 
 internal class Program {
     private static void Main(string[] args) {
         Data.Initialize();
         Data.nextRaceEvent += Visual.OnNextRaceEvent;
+        //Data.nextRaceEvent += ImageHandler.OnNextRaceEvent;
         Data.nextRace();
        
         //Visual.drawTrack(new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight }), 3);

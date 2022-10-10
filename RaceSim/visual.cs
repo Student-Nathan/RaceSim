@@ -83,7 +83,7 @@ namespace RaceSim {
                         switch (rotation) {
                             case Rotation.WestEast: rotation = Rotation.SouthNorth; break;
                             case Rotation.SouthNorth: rotation = Rotation.EastWest; break;
-                            case Rotation.EastWest: rotation = Rotation.SouthNorth; break;
+                            case Rotation.EastWest: rotation = Rotation.NorthSouth; break;
                             case Rotation.NorthSouth: rotation = Rotation.WestEast; break;
                         }
                         break;
