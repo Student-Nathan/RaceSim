@@ -16,8 +16,8 @@ namespace Controller {
         private static Timer _timer;
         public event EventHandler<DriversChangedEventArgs> DriversChanged;
         private int competitors;
-        private int Threshold = 100;
-        private int laps = 3;
+        private int Threshold = 100; //hoeveel meter is een sectie
+        private int laps = 3; //hoeveel rondjes moet een auto hebben gereden
         private int[] drivenLaps;
 
         public Race(Track track, List<IParticipant> participants) {

@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Graphics\Cars\E\TeamBlue.png" />
+    <None Remove="Graphics\Cars\E\TeamGreen.png" />
+    <None Remove="Graphics\Cars\E\TeamOrange.png" />
+    <None Remove="Graphics\Cars\E\TeamPink.png" />
+    <None Remove="Graphics\Cars\E\TeamRed.png" />
+    <None Remove="Graphics\Cars\E\TeamYellow.png" />
+    <None Remove="Graphics\Cars\N\TeamBlue.png" />
+    <None Remove="Graphics\Cars\N\TeamGreen.png" />
+    <None Remove="Graphics\Cars\N\TeamOrange.png" />
+    <None Remove="Graphics\Cars\N\TeamPink.png" />
+    <None Remove="Graphics\Cars\N\TeamRed.png" />
+    <None Remove="Graphics\Cars\N\TeamYellow.png" />
+    <None Remove="Graphics\Cars\S\TeamBlue.png" />
+    <None Remove="Graphics\Cars\S\TeamGreen.png" />
+    <None Remove="Graphics\Cars\S\TeamOrange.png" />
+    <None Remove="Graphics\Cars\S\TeamPink.png" />
+    <None Remove="Graphics\Cars\S\TeamRed.png" />
+    <None Remove="Graphics\Cars\S\TeamYellow.png" />
+    <None Remove="Graphics\Cars\W\TeamBlue.png" />
+    <None Remove="Graphics\Cars\W\TeamGreen.png" />
+    <None Remove="Graphics\Cars\W\TeamOrange.png" />
+    <None Remove="Graphics\Cars\W\TeamPink.png" />
+    <None Remove="Graphics\Cars\W\TeamRed.png" />
+    <None Remove="Graphics\Cars\W\TeamYellow.png" />
+    <None Remove="Graphics\TrackParts\CornerNE.png" />
+    <None Remove="Graphics\TrackParts\CornerNW.png" />
+    <None Remove="Graphics\TrackParts\CornerSE.png" />
+    <None Remove="Graphics\TrackParts\CornerSW.png" />
+    <None Remove="Graphics\TrackParts\Finish.png" />
+    <None Remove="Graphics\TrackParts\StartGrid.png" />
+    <None Remove="Graphics\TrackParts\StraightHorizontal.png" />
+    <None Remove="Graphics\TrackParts\StraightVertical.png" />
+    <None Remove="Graphics\X.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Graphics\Cars\E\TeamBlue.png" />
+    <Content Include="Graphics\Cars\E\TeamGreen.png" />
+    <Content Include="Graphics\Cars\E\TeamOrange.png" />
+    <Content Include="Graphics\Cars\E\TeamPink.png" />
+    <Content Include="Graphics\Cars\E\TeamRed.png" />
+    <Content Include="Graphics\Cars\E\TeamYellow.png" />
+    <Content Include="Graphics\Cars\N\TeamBlue.png" />
+    <Content Include="Graphics\Cars\N\TeamGreen.png" />
+    <Content Include="Graphics\Cars\N\TeamOrange.png" />
+    <Content Include="Graphics\Cars\N\TeamPink.png" />
+    <Content Include="Graphics\Cars\N\TeamRed.png" />
+    <Content Include="Graphics\Cars\N\TeamYellow.png" />
+    <Content Include="Graphics\Cars\S\TeamBlue.png" />
+    <Content Include="Graphics\Cars\S\TeamGreen.png" />
+    <Content Include="Graphics\Cars\S\TeamOrange.png" />
+    <Content Include="Graphics\Cars\S\TeamPink.png" />
+    <Content Include="Graphics\Cars\S\TeamRed.png" />
+    <Content Include="Graphics\Cars\S\TeamYellow.png" />
+    <Content Include="Graphics\Cars\W\TeamBlue.png" />
+    <Content Include="Graphics\Cars\W\TeamGreen.png" />
+    <Content Include="Graphics\Cars\W\TeamOrange.png" />
+    <Content Include="Graphics\Cars\W\TeamPink.png" />
+    <Content Include="Graphics\Cars\W\TeamRed.png" />
+    <Content Include="Graphics\Cars\W\TeamYellow.png" />
+    <Content Include="Graphics\TrackParts\CornerNE.png" />
+    <Content Include="Graphics\TrackParts\CornerNW.png" />
+    <Content Include="Graphics\TrackParts\CornerSE.png" />
+    <Content Include="Graphics\TrackParts\CornerSW.png" />
+    <Content Include="Graphics\TrackParts\Finish.png" />
+    <Content Include="Graphics\TrackParts\StartGrid.png" />
+    <Content Include="Graphics\TrackParts\StraightHorizontal.png" />
+    <Content Include="Graphics\TrackParts\StraightVertical.png" />
+    <Content Include="Graphics\X.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+</Project>

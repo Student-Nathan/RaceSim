@@ -23,14 +23,14 @@ namespace ControllerTest {
         }
         [Test]
         public void NextTrack_OneInQueue_ReturnTrack() {
-            Track track = new Track("testTrack", new SectionTypes[] { SectionTypes.Straight });
+            Track track = new Track("testTrack", new SectionTypes[] { SectionTypes.Straight },3);
             _competition.Tracks.Enqueue(track);
             Track result = _competition.NextTrack();
             Assert.AreEqual(result, track);
         }
         [Test]
         public void NextTrack_OneInQueue_RemoveTrackFromQueue() {
-            Track track = new Track("testTrack", new SectionTypes[] { SectionTypes.Straight });
+            Track track = new Track("testTrack", new SectionTypes[] { SectionTypes.Straight },3);
             _competition.Tracks.Enqueue(track);
             _competition.NextTrack();
             Track result = _competition.NextTrack();
