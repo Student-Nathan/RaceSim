@@ -24,7 +24,6 @@ namespace RaceSim {
         }
 
         public static void OnNextRaceEvent(object sender, NextRaceArgs e) {
-            Console.WriteLine("test");
             initialize();
             drawTrack(e.race.Track);
         }
@@ -112,26 +111,6 @@ namespace RaceSim {
             posX = 0;
             posY = 1;
         }
-
-//delete this, not used
-        //private static String[] rotateGrapic(String[]graphic, int times) {//draait een graphic met de klok mee
-        //    String[] result = new string[graphic.Length];
-        //    for(int i = 1; i<times; i++) {//rotates it multiple times if neccesary 
-        //        for(int j = 0; j < graphic.Length; j++) {//itterates the indexes for the original grapic
-        //            for( int k = 0; k < graphic[j].Length; k++) {//itterates the placement of the characters
-        //                result[k]+=graphic[j][k];
-        //            }
-        //        }
-        //        if (times > 1) {
-        //            Array.Copy(result, graphic, result.Length);
-        //            Array.Clear(result);
-        //        }
-        //    }
-        //    foreach (String s in result) {
-        //        Console.WriteLine(s);
-        //    }
-        //    return result;
-        //}
 
         public static String[] getGraphics(Section section, Rotation rotation) {
             switch (section.SectionType) {

@@ -8,13 +8,14 @@ using System.Drawing;
 using Controller;
 using Model;
 using System.Windows.Media.Imaging;
+using System.Drawing.Imaging;
 
 namespace WPF {
     public static class ImageHandler {
         private static Dictionary<String, Bitmap> bitmapData;
-        private static int imageSize = 256;
+        public static int imageSize = 256;
 
-        private static Bitmap GetBitmap(String path) {
+        public static Bitmap GetBitmap(String path) {
             if (!bitmapData.ContainsKey(path)) {
                 bitmapData[path] = new Bitmap(path);
             }
@@ -25,61 +26,44 @@ namespace WPF {
             bitmapData.Clear();
         }
 
-        private static int[] calculateBounds(Track track) {
-            int rotationINT = track.rotationINT;
-            int[] tempBounds = new int[4] {0,0,0,0};
-            int[] result = new int[2];
-            foreach (Section section in track.Sections) {
-                tempBounds[rotationINT] += 1;
-
-                //copied from visual.cs
-                switch (section.SectionType) {//switch to rotate every section properly and compensate for the empty sectiontype
-                    case SectionTypes.LeftCorner:
-                        switch (rotationINT) {
-                            case 0: rotationINT = 1; break;
-                            case 1: rotationINT = 2; break;
-                            case 2: rotationINT = 3; break;
-                            case 3: rotationINT = 0; break;
-                        }
-                        break;
-                    case SectionTypes.RightCorner:
-                        switch (rotationINT) {
-                            case 0: rotationINT = 3; break;
-                            case 1: rotationINT = 0; break;
-                            case 2: rotationINT = 1; break;
-                            case 3: rotationINT = 2; break;
-                        }
-                        break;
-                }
-
+        public static Bitmap getNewBitmap(int x, int y) {
+            string key = "empty";
+            if (!bitmapData.ContainsKey(key)) {
+                bitmapData.Add(key, new Bitmap(x, y));
+                Graphics graphics = Graphics.FromImage(bitmapData[key]);
+                graphics.FillRectangle(new SolidBrush(System.Drawing.Color.Black), 0, 0, x, y);
             }
 
-            if (tempBounds[0] > tempBounds[2]) {//value voor de breedte
-                result[0] = tempBounds[0];
-            } else {
-                result[0] = tempBounds[2];
-            }
-
-            if (tempBounds[1] > tempBounds[3]) {//value voor de hoogte
-                result[1] = tempBounds[1];
-            } else {
-                result[1] = tempBounds[3];
-            }
-
-            result[0] *= imageSize;//de images zijn 256 pixels hoog en breed
-            result[1] *= imageSize;
-
-            return result;
+            return (Bitmap)bitmapData[key].Clone();
         }
 
-        public static Bitmap getNewBitmap(int width, int height) {
-            return new Bitmap(width, height);
-        }
+        public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap) {
+            if (bitmap == null)
+                throw new ArgumentNullException("bitmap");
 
-        public static void OnNextRaceEvent(Object sender, NextRaceArgs e) {
-            clearCache();
-            int[] bounds = calculateBounds(e.race.Track);
-            Bitmap bitmap = getNewBitmap(bounds[0], bounds[1]);
+            var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+
+            var bitmapData = bitmap.LockBits(
+                rect,
+                ImageLockMode.ReadWrite,
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            try {
+                var size = (rect.Width * rect.Height) * 4;
+
+                return BitmapSource.Create(
+                    bitmap.Width,
+                    bitmap.Height,
+                    bitmap.HorizontalResolution,
+                    bitmap.VerticalResolution,
+                    PixelFormats.Bgra32,
+                    null,
+                    bitmapData.Scan0,
+                    size,
+                    bitmapData.Stride);
+            } finally {
+                bitmap.UnlockBits(bitmapData);
+            }
         }
     }
 }
