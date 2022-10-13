@@ -12,12 +12,12 @@ using System.Drawing.Imaging;
 
 namespace WPF {
     public static class ImageHandler {
-        private static Dictionary<String, Bitmap> bitmapData;
+        private static Dictionary<String, Bitmap> bitmapData = new Dictionary<string, Bitmap>();
         public static int imageSize = 256;
 
         public static Bitmap GetBitmap(String path) {
             if (!bitmapData.ContainsKey(path)) {
-                bitmapData[path] = new Bitmap(path);
+                bitmapData.Add(path, new Bitmap(path));
             }
             return bitmapData[path];
         }
@@ -26,15 +26,16 @@ namespace WPF {
             bitmapData.Clear();
         }
 
-        public static Bitmap getNewBitmap(int x, int y) {
+        public static Bitmap getNewBitmap(int x, int y,int scale) {
             string key = "empty";
             if (!bitmapData.ContainsKey(key)) {
-                bitmapData.Add(key, new Bitmap(x, y));
-                Graphics graphics = Graphics.FromImage(bitmapData[key]);
-                graphics.FillRectangle(new SolidBrush(System.Drawing.Color.Black), 0, 0, x, y);
+                Bitmap bitmap = new Bitmap(x, y);
+                bitmapData.Add(key, bitmap);
+                Graphics graphics = Graphics.FromImage(bitmap);
+                graphics.FillRectangle(new SolidBrush(System.Drawing.Color.DarkGreen), 0, 0, x, y);
             }
-
             return (Bitmap)bitmapData[key].Clone();
+
         }
 
         public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap) {

@@ -14,7 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Controller\Controller.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
-    <ProjectReference Include="..\WpfApp1\WPF.csproj" />
   </ItemGroup>
 
 </Project>

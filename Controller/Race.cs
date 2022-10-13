@@ -209,7 +209,9 @@ namespace Controller {
                 }
             }
             if (driversChanged) {
-                DriversChanged.Invoke(this, new DriversChangedEventArgs(Data.currentRace.Track));//raises the driversChanged event
+                if (DriversChanged is not null) {
+                    DriversChanged.Invoke(this, new DriversChangedEventArgs(Data.currentRace.Track));//raises the driversChanged event
+                }
             }
             if (everyoneFinished) {
                 Data.nextRace();
