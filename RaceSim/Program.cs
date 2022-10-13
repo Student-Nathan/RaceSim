@@ -2,7 +2,6 @@
 using Model;
 using RaceSim;
 using System.ComponentModel;
-using WPF;
 
 internal class Program {
     private static void Main(string[] args) {

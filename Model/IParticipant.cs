@@ -17,7 +17,8 @@ namespace Model {
         Red,
         Green,
         Yellow,
-        Grey,
+        Orange,
+        Pink,
         Blue
     }
 }

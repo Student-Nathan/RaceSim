@@ -22,9 +22,9 @@ namespace WPF {
         private static Rotation rotation;
         private static int posX;
         private static int posY;
-        private static int graphicLength = 4;
-        private static int imageSize = 256/2-35;
+        private static int imageSize = 256/2-25;//calculation to compensate for the white spaces in the png's
         private const string folder = "C:\\Users\\School\\source\\repos\\RaceSim\\RaceSim\\WpfApp1";
+        private static Dictionary<Section, int[]> sectionCoords = new Dictionary<Section, int[]>();
 
         public static void initialize() {
         }
@@ -45,7 +45,12 @@ namespace WPF {
             }
             resetTrack();
             foreach (Section section in track.Sections) {
+                if (!sectionCoords.ContainsKey(section)) {
+                    sectionCoords[section] = new int[2] {posX,posY};
+                }
+                SectionData sectionData = Data.currentRace.getSectionData(section);
                 g.DrawImage(getGraphics(section, rotation), new Point(posX, posY));
+                drawParticipants(plaatje, section, sectionData.Left, sectionData.Right, rotation);
 
 
                 switch (section.SectionType) {//switch to rotate every section properly and compensate for the empty sectiontype
@@ -110,6 +115,48 @@ namespace WPF {
         private const string finishEW = folder + "\\Graphics\\TrackParts\\finishEW.png";
         private const string finishSN = folder + "\\Graphics\\TrackParts\\finishSN.png";
 
+        //drivers
+
+        //Blue
+        private const string blueN = folder + "\\Graphics\\Cars\\N\\TeamBlue.png";
+        private const string blueE = folder + "\\Graphics\\Cars\\E\\TeamBlue.png";
+        private const string blueS = folder + "\\Graphics\\Cars\\S\\TeamBlue.png";
+        private const string blueW = folder + "\\Graphics\\Cars\\W\\TeamBlue.png";
+
+        //Green
+        private const string greenN = folder + "\\Graphics\\Cars\\N\\TeamGreen.png";
+        private const string greenE = folder + "\\Graphics\\Cars\\E\\TeamGreen.png";
+        private const string greenS = folder + "\\Graphics\\Cars\\S\\TeamGreen.png";
+        private const string greenW = folder + "\\Graphics\\Cars\\W\\TeamGreen.png";
+
+        //Orange
+        private const string orangeN = folder + "\\Graphics\\Cars\\N\\TeamOrange.png";
+        private const string orangeE = folder + "\\Graphics\\Cars\\E\\TeamOrange.png";
+        private const string orangeS = folder + "\\Graphics\\Cars\\S\\TeamOrange.png";
+        private const string orangeW = folder + "\\Graphics\\Cars\\W\\TeamOrange.png";
+
+        //Pink
+        private const string pinkN = folder + "\\Graphics\\Cars\\N\\TeamPink.png";
+        private const string pinkE = folder + "\\Graphics\\Cars\\E\\TeamPink.png";
+        private const string pinkS = folder + "\\Graphics\\Cars\\S\\TeamPink.png";
+        private const string pinkW = folder + "\\Graphics\\Cars\\W\\TeamPink.png";
+
+        //Red
+        private const string redN = folder + "\\Graphics\\Cars\\N\\TeamRed.png";
+        private const string redE = folder + "\\Graphics\\Cars\\E\\TeamRed.png";
+        private const string redS = folder + "\\Graphics\\Cars\\S\\TeamRed.png";
+        private const string redW = folder + "\\Graphics\\Cars\\W\\TeamRed.png";
+
+        //Yellow
+        private const string yellowN = folder + "\\Graphics\\Cars\\N\\TeamYellow.png";
+        private const string yellowE = folder + "\\Graphics\\Cars\\E\\TeamYellow.png";
+        private const string yellowS = folder + "\\Graphics\\Cars\\S\\TeamYellow.png";
+        private const string yellowW = folder + "\\Graphics\\Cars\\W\\TeamYellow.png";
+
+        //broken
+        private const string broken = folder + "\\Graphics\\X.png";
+
+
         #endregion
 
         public static Bitmap getGraphics(Section section, Rotation rotation) {
@@ -157,9 +204,97 @@ namespace WPF {
                     break;
             }
             throw new Exception("No graphic found");
-            
-
         }
+
+        private static Bitmap drawParticipants(Bitmap plaatje, Section section, IParticipant left, IParticipant right, Rotation rotation){
+            Graphics g = Graphics.FromImage(plaatje);
+            int[] sectionCoord = sectionCoords[section];
+            if(left is not null) {
+                switch (rotation) {
+                    case Rotation.WestEast: g.DrawImage(getDriverGraphics(left, rotation), new Point(sectionCoord[0]+20, sectionCoord[1]+20));break;
+                    case Rotation.NorthSouth: g.DrawImage(getDriverGraphics(left, rotation), new Point(sectionCoord[0]+55, sectionCoord[1]+40)); break;
+                    case Rotation.EastWest: g.DrawImage(getDriverGraphics(left, rotation), new Point(sectionCoord[0]+30, sectionCoord[1]+50)); break;
+                    case Rotation.SouthNorth: g.DrawImage(getDriverGraphics(left, rotation), new Point(sectionCoord[0]+20, sectionCoord[1]+40)); break;
+                }
+            }
+            if (right is not null) {
+                switch (rotation) {
+                    case Rotation.WestEast: g.DrawImage(getDriverGraphics(right, rotation), new Point(sectionCoord[0]+20, sectionCoord[1]+55)); break;
+                    case Rotation.NorthSouth: g.DrawImage(getDriverGraphics(right, rotation), new Point(sectionCoord[0]+30, sectionCoord[1]+40)); break;
+                    case Rotation.EastWest: g.DrawImage(getDriverGraphics(right, rotation), new Point(sectionCoord[0]+30, sectionCoord[1]+20)); break;
+                    case Rotation.SouthNorth: g.DrawImage(getDriverGraphics(right, rotation), new Point(sectionCoord[0]+50, sectionCoord[1]+40)); break;
+                }
+            }
+
+            return plaatje;
+        }
+
+        //returns string with path to relevant driver graphic
+        private static Bitmap getDriverGraphics(IParticipant driver, Rotation rotation) {
+            if (driver.Equipment.IsBroken) {
+                return ImageHandler.GetBitmap(broken);
+            }
+            switch (driver.TeamColor) {
+                case TeamColor.Red:
+                    switch (rotation) {
+                        case Rotation.WestEast: return ImageHandler.GetBitmap(redE);
+                        case Rotation.NorthSouth: return ImageHandler.GetBitmap(redS);
+                        case Rotation.EastWest: return ImageHandler.GetBitmap(redW);
+                        case Rotation.SouthNorth: return ImageHandler.GetBitmap(redN);
+                        break;
+                    }
+                    break;
+                case TeamColor.Green:
+                    switch (rotation) {
+                        case Rotation.WestEast: return ImageHandler.GetBitmap(greenE);
+                        case Rotation.NorthSouth: return ImageHandler.GetBitmap(greenS);
+                        case Rotation.EastWest: return ImageHandler.GetBitmap(greenW);
+                        case Rotation.SouthNorth: return ImageHandler.GetBitmap(greenN);
+                        break;
+                    }
+                    break;
+                case TeamColor.Yellow:
+                    switch (rotation) {
+                        case Rotation.WestEast: return ImageHandler.GetBitmap(yellowE);
+                        case Rotation.NorthSouth: return ImageHandler.GetBitmap(yellowS);
+                        case Rotation.EastWest: return ImageHandler.GetBitmap(yellowW);
+                        case Rotation.SouthNorth: return ImageHandler.GetBitmap(yellowN);
+                        break;
+                    }
+                    break;
+
+                case TeamColor.Orange:
+                    switch (rotation) {
+                        case Rotation.WestEast: return ImageHandler.GetBitmap(orangeE);
+                        case Rotation.NorthSouth: return ImageHandler.GetBitmap(orangeS);
+                        case Rotation.EastWest: return ImageHandler.GetBitmap(orangeW);
+                        case Rotation.SouthNorth: return ImageHandler.GetBitmap(orangeN);
+                        break;
+                    }
+                    break;
+                case TeamColor.Pink:
+                    switch (rotation) {
+                        case Rotation.WestEast: return ImageHandler.GetBitmap(pinkE);
+                        case Rotation.NorthSouth: return ImageHandler.GetBitmap(pinkS);
+                        case Rotation.EastWest: return ImageHandler.GetBitmap(pinkW);
+                        case Rotation.SouthNorth: return ImageHandler.GetBitmap(pinkN);
+                        break;
+                    }
+                    break;
+                case TeamColor.Blue:
+                    switch (rotation) {
+                        case Rotation.WestEast: return ImageHandler.GetBitmap(blueE);
+                        case Rotation.NorthSouth: return ImageHandler.GetBitmap(blueS);
+                        case Rotation.EastWest: return ImageHandler.GetBitmap(blueW);
+                        case Rotation.SouthNorth: return ImageHandler.GetBitmap(blueN);
+                        break;
+                    }
+                    break;
+            }
+            throw new Exception("GUI: Driver graphic not found");
+        }
+        
+        
         //still old copied code from visual in racesim
         public static String replacePlaceholders(String sectionPart, IParticipant left, IParticipant right) {
             if (left != null) {

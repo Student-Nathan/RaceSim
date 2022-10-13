@@ -19,7 +19,7 @@ namespace WPF {
             if (!bitmapData.ContainsKey(path)) {
                 bitmapData.Add(path, new Bitmap(path));
             }
-            return bitmapData[path];
+            return (Bitmap)bitmapData[path].Clone();
         }
 
         private static void clearCache() {
