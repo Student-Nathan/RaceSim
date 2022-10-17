@@ -25,6 +25,7 @@ namespace WPF {
         private static int imageSize = 256/2-25;//calculation to compensate for the white spaces in the png's
         private const string folder = "C:\\Users\\School\\source\\repos\\RaceSim\\RaceSim\\WpfApp1";
         private static Dictionary<Section, int[]> sectionCoords = new Dictionary<Section, int[]>();
+        public static event EventHandler<NextRaceArgs> drawingReady;
 
         public static void initialize() {
         }
@@ -87,7 +88,9 @@ namespace WPF {
         }
 
         public static void OnNextRace(object sender, NextRaceArgs e) {
+            ImageHandler.clearCache();
             drawTrack(e.race.Track);
+            drawingReady.Invoke(null, new NextRaceArgs(e.race));
         }
 
         #region graphics

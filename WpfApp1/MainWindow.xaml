@@ -1,17 +1,36 @@
-﻿<Window x:Class="WpfApp1.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
+        xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="WpfApp1.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" RenderTransformOrigin="0.491,0.518" Margin="0,-14,0,4">
+    <!--<Window.DataContext>
+        <Controller:DataContext/>
+    </Window.DataContext>-->
+    <Grid RenderTransformOrigin="0.491,0.518" Margin="0,-14,0,4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="304*"/>
+            <ColumnDefinition Width="495*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0*"/>
             <RowDefinition Height="25*"/>
             <RowDefinition Height="49*"/>
         </Grid.RowDefinitions>
-        <Image x:Name="MainScreen" Grid.RowSpan="3"/>
+        <DockPanel Height="20" VerticalAlignment="Top" Margin="0,15,0,0" Grid.RowSpan="2" Grid.ColumnSpan="3" >
+            <Menu  DockPanel.Dock="Top" RenderTransformOrigin="0,0" Height="20">
+                <MenuItem Header="Menu">
+                    <Button Content="Race Stats" Click="MenuItem_RaceStat_Click"/>
+                    <Button Content="Driver Stats" Click="MenuItem_DriverStat_Click"/>
+                    <Button Content="Close Sim" Click="MenuItem_Exit_Click"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+        <Image x:Name="MainScreen" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
+        <!--<Label Grid.RowSpan="1" Margin="0,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="11.1" RenderTransformOrigin="3.03,8.661" Content="{Binding Mode=OneWay}"/>-->
     </Grid>
 </Window>

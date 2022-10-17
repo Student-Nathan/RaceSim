@@ -44,9 +44,9 @@ namespace Controller {
 
         public void RandomizeEquipment() {
             foreach (IParticipant participant in Participants) {
-                participant.Equipment.Quality = _random.Next(5, 10);
-                participant.Equipment.Performance = _random.Next(5, 10);
-                participant.Equipment.Speed = _random.Next(5, 10);
+                participant.Equipment.Quality = _random.Next(1, 10);
+                participant.Equipment.Performance = _random.Next(5, 11);
+                participant.Equipment.Speed = _random.Next(4, 11);
             }
         }
 
@@ -220,15 +220,14 @@ namespace Controller {
         #endregion
         public void Cleanup() {
             _timer.Stop();
-            Console.Clear();
             DriversChanged = null;
         }
 
         private void checkBroken() {
             for(int i = 0; i<competitors; i++) {
-                int random = _random.Next(0, 1000);
+                int random = _random.Next(0, Participants[i].Equipment.Quality*100);
                 if (!Participants[i].Equipment.IsBroken) {
-                    if (random >= Participants[i].Equipment.Quality * 100) {
+                    if (random == 1) {
                         Participants[i].Equipment.IsBroken = true;
                         if (Participants[i].Equipment.Performance > 3) {
                             Participants[i].Equipment.Performance -= 1;
@@ -237,7 +236,7 @@ namespace Controller {
                         }
                     }
                 } else {
-                    if (random <= Participants[i].Equipment.Quality*100) {
+                    if (random <= Participants[i].Equipment.Quality * 25) {
                         Participants[i].Equipment.IsBroken = false;
                     }
                 }

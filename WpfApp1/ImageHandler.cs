@@ -22,7 +22,7 @@ namespace WPF {
             return (Bitmap)bitmapData[path].Clone();
         }
 
-        private static void clearCache() {
+        public static void clearCache() {
             bitmapData.Clear();
         }
 

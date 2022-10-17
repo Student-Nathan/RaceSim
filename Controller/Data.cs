@@ -11,6 +11,12 @@ namespace Controller{
         public static Competition? Competition;
         public static Race ?currentRace;
         public static event EventHandler<NextRaceArgs> nextRaceEvent;
+        private static Boolean GUI = false;
+
+        public static void Initialize(Boolean gui) {
+            GUI = true;
+            Initialize();
+        }
 
         public static void Initialize() {
             Competition = new Competition();
@@ -28,6 +34,9 @@ namespace Controller{
         }
 
         public static void nextRace() {
+            if (!GUI) {
+                Console.Clear();
+            }
             currentRace?.Cleanup();
             Track next = Competition.NextTrack();
             if (next != null) {
@@ -44,10 +53,9 @@ namespace Controller{
 
         public static void addTracks() {
             //Track track1 = new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish }, 3);
-            Track track1 = new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight },3);
-            //Competition.Tracks.Enqueue(track1);
+            Track track1 = new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Straight },3);
+            Competition.Tracks.Enqueue(track1);
             //Track track2 = new Track("test 5", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight }, 3);
-
             Track track2 = new Track("test 5", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid,SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Finish,SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight }, 3);
             Competition.Tracks.Enqueue(track2);
 

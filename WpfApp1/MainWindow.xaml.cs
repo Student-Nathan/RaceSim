@@ -22,13 +22,16 @@ namespace WpfApp1 {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        RaceStats raceScreen;
+        DriverStats driverScreen;
         public MainWindow() {
             InitializeComponent();
-            Data.Initialize();
+            Data.Initialize(true);
             Data.nextRaceEvent += GUIVisual.OnNextRace;
+            Data.nextRaceEvent += this.OnNextRace;
+            GUIVisual.drawingReady += this.OnDrawingReady;
             Data.nextRace();
             Data.currentRace.DriversChanged += this.OnDriversChanged;
-
         }
 
         public void OnDriversChanged(object sender, DriversChangedEventArgs e) {
@@ -38,6 +41,37 @@ namespace WpfApp1 {
                 this.MainScreen.Source = null;
                 this.MainScreen.Source = GUIVisual.drawTrack(e.Track);
             }));
+        }
+        public void OnNextRace(object sender, NextRaceArgs e) {
+            Data.currentRace.DriversChanged += this.OnDriversChanged;
+        }
+        public void OnDrawingReady(object sender, NextRaceArgs e) {
+            this.MainScreen.Dispatcher.BeginInvoke(
+            DispatcherPriority.Render,
+            new Action(() => {
+                this.MainScreen.Source = null;
+                this.MainScreen.Source = GUIVisual.drawTrack(e.race.Track);
+            }));
+            
+        }
+
+        private void MenuItem_Exit_Click(object sender, RoutedEventArgs e) {
+            Application.Current.Shutdown();
+            this.Close();
+        }
+
+        private void Menu(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void MenuItem_RaceStat_Click(object sender, RoutedEventArgs e) {
+            raceScreen = new RaceStats();
+            raceScreen.Show();
+        }
+
+        private void MenuItem_DriverStat_Click(object sender, RoutedEventArgs e) {
+            driverScreen = new DriverStats();
+            driverScreen.Show();
         }
     }
 }
