@@ -24,6 +24,7 @@ namespace WpfApp1 {
     public partial class MainWindow : Window {
         RaceStats raceScreen;
         DriverStats driverScreen;
+
         public MainWindow() {
             InitializeComponent();
             Data.Initialize(true);
@@ -31,6 +32,8 @@ namespace WpfApp1 {
             Data.nextRaceEvent += this.OnNextRace;
             GUIVisual.drawingReady += this.OnDrawingReady;
             Data.nextRace();
+            RaceContext dataContext = new RaceContext();
+            Data.currentRace.DriversChanged += dataContext.OnDriversChanged;
             Data.currentRace.DriversChanged += this.OnDriversChanged;
         }
 

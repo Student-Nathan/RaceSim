@@ -4,12 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
-        xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="WpfApp1.MainWindow"
+        xmlns:Controller="clr-namespace:Controller;assembly=Controller" xmlns:Model="clr-namespace:Model;assembly=Model" x:Class="WpfApp1.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <!--<Window.DataContext>
-        <Controller:DataContext/>
-    </Window.DataContext>-->
+
+    <Window.DataContext>
+        <Model:RaceContext/>
+    </Window.DataContext>
+
     <Grid RenderTransformOrigin="0.491,0.518" Margin="0,-14,0,4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="304*"/>
@@ -21,7 +23,7 @@
             <RowDefinition Height="25*"/>
             <RowDefinition Height="49*"/>
         </Grid.RowDefinitions>
-        <DockPanel Height="20" VerticalAlignment="Top" Margin="0,15,0,0" Grid.RowSpan="2" Grid.ColumnSpan="3" >
+        <DockPanel Height="20" VerticalAlignment="Top" Margin="0,14,0,0" Grid.RowSpan="2">
             <Menu  DockPanel.Dock="Top" RenderTransformOrigin="0,0" Height="20">
                 <MenuItem Header="Menu">
                     <Button Content="Race Stats" Click="MenuItem_RaceStat_Click"/>
@@ -31,6 +33,7 @@
             </Menu>
         </DockPanel>
         <Image x:Name="MainScreen" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
-        <!--<Label Grid.RowSpan="1" Margin="0,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="11.1" RenderTransformOrigin="3.03,8.661" Content="{Binding Mode=OneWay}"/>-->
+        <Label Margin="20,100,0,5" HorizontalAlignment="Left" Content="{Binding publicTrackName}" FontSize="24" FontWeight="Bold" Grid.RowSpan="2" Width="63"/>
+
     </Grid>
 </Window>
