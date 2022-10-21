@@ -92,10 +92,10 @@ namespace Controller {
         private Section findNextSection(Section section, int sections) {
             Section next = section;
             for (int i = 0; i < sections; i++) {
-                try {
-                    next = Track.Sections.Find(section).Next.Value;
-                } catch (NullReferenceException e) {
+                if (next.Equals(Track.Sections.Last.Value)) {
                     next = Track.Sections.First.Value;
+                } else {
+                    next = Track.Sections.Find(section).Next.Value;
                 }
             }
             SectionData nextData = getSectionData(next);
@@ -206,7 +206,6 @@ namespace Controller {
                             int newDistance = (int)(sectionData.DistanceLeft - (Threshold * sections));//berekent de nieuwe distance om in de nieuwe sectie te plaatsen
                             if (nextSection.Equals(section)) {
                                 sectionData.DistanceLeft = Threshold;
-                                continue;
                             } else {
                                 placeDriverData(nextSection, sectionData.Left, newDistance, (int)sections);
                                 removeDriverData(sectionData, true);
@@ -226,7 +225,6 @@ namespace Controller {
                             nextSection = findNextSection(section, sections);//zoekt de volgende sectie
                             if (nextSection.Equals(section)) {
                                 sectionData.DistanceRight = Threshold;
-                                continue;
                             } else {
                                 int newDistance = (int)(sectionData.DistanceRight - (Threshold * sections));//berekent de nieuwe distance om in de nieuwe sectie te plaatsen
                                 placeDriverData(nextSection, sectionData.Right, newDistance, (int)sections);

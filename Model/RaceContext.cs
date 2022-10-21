@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Model {
     public class RaceContext : INotifyPropertyChanged {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private String currentTrackName;
+        private string currentTrackName;
         public string publicTrackName {
             get => currentTrackName;
             set {
@@ -25,7 +25,8 @@ namespace Model {
 
 
         public void OnDriversChanged(object sender, DriversChangedEventArgs e) {
-            publicTrackName = e.Track.Name;
+            //publicTrackName = e.Track.Name;
+            publicTrackName = "Test";
             //currentTrackName = "Test";
             //RaiseProperChanged();
         }
