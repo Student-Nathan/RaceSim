@@ -35,7 +35,7 @@ namespace Controller {
             }
             start();
         }
-        public SectionData getSectionData(Section section) {
+        private SectionData getSectionData(Section section) {
             if (!_positions.ContainsKey(section)) {
                 _positions[section] = new SectionData();
             }
@@ -50,7 +50,7 @@ namespace Controller {
             }
         }
 
-        public void assignStart() {
+        private void assignStart() {
             List<Section> starts = new List<Section>();
             int startNR = 0;
             foreach (Section section in Track.Sections) {
@@ -153,7 +153,6 @@ namespace Controller {
 
             for (int i = 0; i < distance; i++) {
                 if (section.SectionType.Equals(SectionTypes.Finish)) {
-                    i = i;
                     drivenLaps[Participants.IndexOf(driver)] += 1;
                     break;
                 } else {

@@ -33,7 +33,7 @@ namespace WPF {
 
         public static BitmapSource drawTrack(Track track) {
             int[] bounds = calculateBounds(track);
-            Bitmap plaatje = ImageHandler.getNewBitmap(bounds[0], bounds[1],5);
+            Bitmap plaatje = ImageHandler.getNewBitmap(bounds[0], bounds[1]);
             //Bitmap plaatje = ImageHandler.getNewBitmap(900, 512);
             Graphics g = Graphics.FromImage(plaatje);
 
@@ -162,7 +162,7 @@ namespace WPF {
 
         #endregion
 
-        public static Bitmap getGraphics(Section section, Rotation rotation) {
+        private static Bitmap getGraphics(Section section, Rotation rotation) {
             switch (section.SectionType) {
                 case SectionTypes.Empty: return ImageHandler.GetBitmap("empty");
                 case SectionTypes.Straight:
@@ -295,30 +295,6 @@ namespace WPF {
                     break;
             }
             throw new Exception("GUI: Driver graphic not found");
-        }
-        
-        
-        //still old copied code from visual in racesim
-        public static String replacePlaceholders(String sectionPart, IParticipant left, IParticipant right) {
-            if (left != null) {
-                if (left.Equipment.IsBroken) {
-                    sectionPart = sectionPart.Replace("1", "X");
-                } else {
-                    sectionPart = sectionPart.Replace("1", left.Name[0].ToString());
-                }
-            } else {
-                sectionPart = sectionPart.Replace("1", " ");
-            }
-            if (right != null) {
-                if (right.Equipment.IsBroken) {
-                    sectionPart = sectionPart.Replace("2", "X");
-                } else {
-                    sectionPart = sectionPart.Replace("2", right.Name[0].ToString());
-                }
-            } else {
-                sectionPart = sectionPart.Replace("2", " ");
-            }
-            return sectionPart;
         }
 
         private static int[] calculateBounds(Track track) {

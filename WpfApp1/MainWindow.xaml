@@ -33,7 +33,7 @@
             </Menu>
         </DockPanel>
         <Image x:Name="MainScreen" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
-        <Label PresentationTraceSources.TraceLevel="High" Margin="20,67,0,5" HorizontalAlignment="Left" FontSize="24" FontWeight="Bold" Grid.RowSpan="2" Width="274" Content="{Binding publicTrackName}"/>
+        <Label Name="NameLabel" Margin="20,67,0,5" HorizontalAlignment="Left" FontSize="12" FontWeight="Bold" Grid.RowSpan="2" Width="274" Content="{Binding publicTrackName}"/>
 
     </Grid>
 </Window>

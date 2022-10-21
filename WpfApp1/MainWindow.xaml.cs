@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml;
 using Controller;
 using Model;
 using WPF;
@@ -24,6 +25,7 @@ namespace WpfApp1 {
     public partial class MainWindow : Window {
         RaceStats raceScreen;
         DriverStats driverScreen;
+        RaceContext raceContext;
 
         public MainWindow() {
             InitializeComponent();
@@ -31,10 +33,12 @@ namespace WpfApp1 {
             Data.nextRaceEvent += GUIVisual.OnNextRace;
             Data.nextRaceEvent += this.OnNextRace;
             GUIVisual.drawingReady += this.OnDrawingReady;
+            raceContext = new RaceContext();
+            NameLabel.DataContext = raceContext;
             Data.nextRace();
-            RaceContext dataContext = new RaceContext();
-            Data.currentRace.DriversChanged += dataContext.OnDriversChanged;
-            Data.currentRace.DriversChanged += this.OnDriversChanged;
+
+            //Data.currentRace.DriversChanged += raceContext.OnDriversChanged;
+            //Data.currentRace.DriversChanged += this.OnDriversChanged;
         }
 
         public void OnDriversChanged(object sender, DriversChangedEventArgs e) {
@@ -47,6 +51,7 @@ namespace WpfApp1 {
         }
         public void OnNextRace(object sender, NextRaceArgs e) {
             Data.currentRace.DriversChanged += this.OnDriversChanged;
+            Data.currentRace.DriversChanged += raceContext.OnDriversChanged;
         }
         public void OnDrawingReady(object sender, NextRaceArgs e) {
             this.MainScreen.Dispatcher.BeginInvoke(
