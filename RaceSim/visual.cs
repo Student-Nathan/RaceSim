@@ -60,7 +60,7 @@ namespace RaceSim {
 
  
 
-        public static void drawTrack(Track track) {
+        private static void drawTrack(Track track) {
             
             switch (track.rotationINT) {
                 case 0: rotation = Rotation.WestEast; break;
@@ -106,13 +106,13 @@ namespace RaceSim {
             }
         }
 
-        public static void resetTrack() {
+        private static void resetTrack() {
             Console.Clear();
             posX = 0;
             posY = 1;
         }
 
-        public static String[] getGraphics(Section section, Rotation rotation) {
+        private static String[] getGraphics(Section section, Rotation rotation) {
             switch (section.SectionType) {
                 case SectionTypes.Empty: return _empty;
                 case SectionTypes.Straight:
@@ -159,7 +159,7 @@ namespace RaceSim {
             throw new Exception("No graphic found");
         }
 
-        public static String replacePlaceholders(String sectionPart, IParticipant left, IParticipant right) {
+        private static String replacePlaceholders(String sectionPart, IParticipant left, IParticipant right) {
             if (left != null) {
                 if (left.Equipment.IsBroken) {
                     sectionPart = sectionPart.Replace("1", "X");
