@@ -17,7 +17,7 @@ namespace Controller {
         public String? trackName4 { get; set; }
         public String? trackName5 { get; set; }
         public List<Track>? trackNameList { get; set; } = new List<Track>();
-        public IParticipant[] leaderBoard { get; set; } = new IParticipant[Data.Competition.Participants.Count];
+        public List<IParticipant> leaderBoard { get; set; } = new List<IParticipant>();
 
         private void RaiseProperChanged() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
 
@@ -47,7 +47,8 @@ namespace Controller {
         }
 
         public void UpdateLeaderboard() {
-            leaderBoard = Data.Competition.Participants.OrderBy(driver => driver.Points).Take(5).ToArray();
+            leaderBoard = Data.Competition.Participants.OrderByDescending(driver => driver.Points).Take(5).ToArray().ToList();
+            
         }
     }
 }

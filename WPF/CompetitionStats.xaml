@@ -6,28 +6,29 @@
         xmlns:local="clr-namespace:WPF"
         xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="WPF.DriverStats"
         mc:Ignorable="d"
-        Title="Competition Stats" Height="450" Width="800">
+        Title="Competition Stats" Height="320" Width="250">
 
     <Window.DataContext>
         <Controller:CompetitionContext/>
     </Window.DataContext>
 
     <Grid>
-        <ListView Margin="10" Name="lvUsers" ItemsSource="{Binding trackNameList}">
+        <ListView Name="LeaderBoard" ItemsSource="{Binding leaderBoard}" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,0,134">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
-                    <!--<GridViewColumn Header="Age" Width="50" DisplayMemberBinding="{Binding Age}" />
-                    <GridViewColumn Header="Mail" Width="150" DisplayMemberBinding="{Binding Mail}" /-->
+                    <GridViewColumn Header="Name:" DisplayMemberBinding="{Binding Name}" Width="120" />
+                    <GridViewColumn Header="Points:" DisplayMemberBinding="{Binding Points}" Width="120"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <!--<Label HorizontalAlignment="Left" Margin="22,25,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.54,0.513" Content="Volgende Tracks:" Height="26" Width="184"/>
-        <Label HorizontalAlignment="Left" Margin="22,51,0,0" VerticalAlignment="Top" Width="184" Content="{Binding trackName1}"/>
-        <Label HorizontalAlignment="Left" Margin="22,77,0,0" VerticalAlignment="Top" Width="184" Content="{Binding trackName2}"/>
-        <Label HorizontalAlignment="Left" Margin="22,103,0,0" VerticalAlignment="Top" Width="184" Content="{Binding trackName3}"/>
-        <Label HorizontalAlignment="Left" Margin="22,129,0,0" VerticalAlignment="Top" Width="184" Content="{Binding trackName4}"/>
-        <Label HorizontalAlignment="Left" Margin="22,155,0,0" VerticalAlignment="Top" Width="184" Content="{Binding trackName5}"/>-->
+
+        <ListView Name="NextTracks" ItemsSource="{Binding trackNameList}" Margin="0,160,0,0" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Volgende Tracks:" DisplayMemberBinding="{Binding Name}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
 
     </Grid>
 </Window>
