@@ -181,7 +181,7 @@ namespace RaceSim {
             return sectionPart;
         }
 
-        private static void OnDriversChanged(object sender, DriversChangedEventArgs e) {
+        private static void OnDriversChanged(object? sender, DriversChangedEventArgs e) {
             drawTrack(e.Track);
         }
     }
