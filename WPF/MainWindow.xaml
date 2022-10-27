@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp1"
-        xmlns:Controller="clr-namespace:Controller;assembly=Controller" xmlns:Model="clr-namespace:Model;assembly=Model" x:Class="WpfApp1.MainWindow"
+        xmlns:local="clr-namespace:WPF"
+        xmlns:Controller="clr-namespace:Controller;assembly=Controller" xmlns:Model="clr-namespace:Model;assembly=Model" x:Class="WPF.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
@@ -27,7 +27,7 @@
             <Menu  DockPanel.Dock="Top" RenderTransformOrigin="0,0" Height="20">
                 <MenuItem Header="Menu">
                     <Button Content="Race Stats" Click="MenuItem_RaceStat_Click"/>
-                    <Button Content="Driver Stats" Click="MenuItem_DriverStat_Click"/>
+                    <Button Content="Competitions Stats" Click="MenuItem_DriverStat_Click"/>
                     <Button Content="Close Sim" Click="MenuItem_Exit_Click"/>
                 </MenuItem>
             </Menu>

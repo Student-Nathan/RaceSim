@@ -27,7 +27,7 @@ namespace WPF {
         }
 
         public static Bitmap getNewBitmap(int x, int y) {
-            string key = "empty";
+            string key = "Empty";
             if (!bitmapData.ContainsKey(key)) {
                 Bitmap bitmap = new Bitmap(x, y);
                 bitmapData.Add(key, bitmap);

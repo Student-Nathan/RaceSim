@@ -10,7 +10,7 @@ namespace Controller{
     public static class Data {
         public static Competition? Competition;
         public static Race ?currentRace;
-        public static event EventHandler<NextRaceArgs> nextRaceEvent;
+        public static event EventHandler<NextRaceArgs>? nextRaceEvent;
         private static Boolean GUI = false;
 
         public static void Initialize(Boolean gui) {
@@ -26,17 +26,17 @@ namespace Controller{
         }
         public static void addParticipants() {
             Driver driver1 = new Driver("TestDriver",TeamColor.Red);
-            Competition.Participants.Add(driver1);
+            Competition?.Participants.Add(driver1);
             Driver driver2 = new Driver("DestDriver2",TeamColor.Green);
-            Competition.Participants.Add(driver2);
+            Competition?.Participants.Add(driver2);
             Driver driver3 = new Driver("EestDriver3", TeamColor.Blue);
-            Competition.Participants.Add(driver3);
+            Competition?.Participants.Add(driver3);
             Driver driver4 = new Driver("test", TeamColor.Pink);
             Driver driver5 = new Driver("test", TeamColor.Yellow);
             Driver driver6 = new Driver("test", TeamColor.Orange);
-            Competition.Participants.Add(driver4);
-            Competition.Participants.Add(driver5);
-            Competition.Participants.Add(driver6);
+            Competition?.Participants.Add(driver4);
+            Competition?.Participants.Add(driver5);
+            Competition?.Participants.Add(driver6);
 
         }
 
@@ -45,12 +45,13 @@ namespace Controller{
                 Console.Clear();
             }
             currentRace?.Cleanup();
-            Track next = Competition.NextTrack();
+            Track? next = Competition.NextTrack();
             if (next != null) {
+
                 Race race1 = new Race(next, Competition.Participants);
                 race1.RandomizeEquipment();
                 currentRace = race1;
-                nextRaceEvent.Invoke(null, new NextRaceArgs(currentRace));
+                nextRaceEvent?.Invoke(null, new NextRaceArgs(currentRace));
             } else {
                 currentRace = null;
             }
@@ -64,12 +65,12 @@ namespace Controller{
 
 
             Track track2 = new Track("test 5", new SectionTypes[] {SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Straight,SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Finish, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight,SectionTypes.Straight },3);
-            Competition.Tracks.Enqueue(track1);
-            Competition.Tracks.Enqueue(track2);
-            Competition.Tracks.Enqueue(track1);
-            Competition.Tracks.Enqueue(track2);
-            Competition.Tracks.Enqueue(track1);
-            Competition.Tracks.Enqueue(track2);
+            Competition?.Tracks.Enqueue(track1);
+            Competition?.Tracks.Enqueue(track2);
+            Competition?.Tracks.Enqueue(track1);
+            Competition?.Tracks.Enqueue(track2);
+            Competition?.Tracks.Enqueue(track1);
+            Competition?.Tracks.Enqueue(track2);
             //Track track2 = new Track("test 5", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight , SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight }, 3);
             //Track track2 = new Track("test 5", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid,SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Finish,SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight }, 3);
             //Competition.Tracks.Enqueue(track2);

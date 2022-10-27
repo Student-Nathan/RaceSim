@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Windows.Threading;
+using System.Windows.Controls.Primitives;
+using Track = Model.Track;
 
 namespace WPF {
     public enum Rotation {
@@ -23,17 +25,16 @@ namespace WPF {
         private static int posX;
         private static int posY;
         private static int imageSize = 256/2-25;//calculation to compensate for the white spaces in the png's
-        private const string folder = "C:\\Users\\School\\source\\repos\\RaceSim\\RaceSim\\WpfApp1";
+        private const string folder = "C:\\Users\\School\\source\\repos\\RaceSim\\RaceSim\\WPF";
         private static Dictionary<Section, int[]> sectionCoords = new Dictionary<Section, int[]>();
-        public static event EventHandler<NextRaceArgs> drawingReady;
+        //public static event EventHandler<NextRaceArgs> drawingReady;
 
         public static void initialize() {
         }
 
 
         public static BitmapSource drawTrack(Track track) {
-            int[] bounds = calculateBounds(track);
-            Bitmap plaatje = ImageHandler.getNewBitmap(bounds[0], bounds[1]);
+            Bitmap plaatje = ImageHandler.GetBitmap("Empty");
             //Bitmap plaatje = ImageHandler.getNewBitmap(900, 512);
             Graphics g = Graphics.FromImage(plaatje);
 
@@ -87,10 +88,13 @@ namespace WPF {
             posY = 0;
         }
 
-        public static void OnNextRace(object sender, NextRaceArgs e) {
+        public static void OnNextRace(object? sender, NextRaceArgs e) {
             ImageHandler.clearCache();
+            int[] bounds = calculateBounds(e.race.Track);
+            ImageHandler.getNewBitmap(bounds[0], bounds[1]);
             drawTrack(e.race.Track);
-            drawingReady.Invoke(null, new NextRaceArgs(e.race));
+           
+            //drawingReady.Invoke(null, new NextRaceArgs(e.race));
         }
 
         #region graphics
@@ -244,7 +248,6 @@ namespace WPF {
                         case Rotation.NorthSouth: return ImageHandler.GetBitmap(redS);
                         case Rotation.EastWest: return ImageHandler.GetBitmap(redW);
                         case Rotation.SouthNorth: return ImageHandler.GetBitmap(redN);
-                        break;
                     }
                     break;
                 case TeamColor.Green:
@@ -253,7 +256,6 @@ namespace WPF {
                         case Rotation.NorthSouth: return ImageHandler.GetBitmap(greenS);
                         case Rotation.EastWest: return ImageHandler.GetBitmap(greenW);
                         case Rotation.SouthNorth: return ImageHandler.GetBitmap(greenN);
-                        break;
                     }
                     break;
                 case TeamColor.Yellow:
@@ -262,7 +264,6 @@ namespace WPF {
                         case Rotation.NorthSouth: return ImageHandler.GetBitmap(yellowS);
                         case Rotation.EastWest: return ImageHandler.GetBitmap(yellowW);
                         case Rotation.SouthNorth: return ImageHandler.GetBitmap(yellowN);
-                        break;
                     }
                     break;
 
@@ -272,7 +273,6 @@ namespace WPF {
                         case Rotation.NorthSouth: return ImageHandler.GetBitmap(orangeS);
                         case Rotation.EastWest: return ImageHandler.GetBitmap(orangeW);
                         case Rotation.SouthNorth: return ImageHandler.GetBitmap(orangeN);
-                        break;
                     }
                     break;
                 case TeamColor.Pink:
@@ -281,7 +281,6 @@ namespace WPF {
                         case Rotation.NorthSouth: return ImageHandler.GetBitmap(pinkS);
                         case Rotation.EastWest: return ImageHandler.GetBitmap(pinkW);
                         case Rotation.SouthNorth: return ImageHandler.GetBitmap(pinkN);
-                        break;
                     }
                     break;
                 case TeamColor.Blue:
@@ -290,7 +289,6 @@ namespace WPF {
                         case Rotation.NorthSouth: return ImageHandler.GetBitmap(blueS);
                         case Rotation.EastWest: return ImageHandler.GetBitmap(blueW);
                         case Rotation.SouthNorth: return ImageHandler.GetBitmap(blueN);
-                        break;
                     }
                     break;
             }

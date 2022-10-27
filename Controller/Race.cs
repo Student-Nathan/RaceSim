@@ -13,12 +13,16 @@ namespace Controller {
         public DateTime StartTime { get; set; }
         private Random _random;
         private Dictionary<Section, SectionData> _positions;
-        private static Timer _timer;
-        public event EventHandler<DriversChangedEventArgs> DriversChanged;
-        private int competitors;
+        private static Timer? _timer;
+        public event EventHandler<DriversChangedEventArgs>? DriversChanged;
+        public event EventHandler<UpdateRaceStatsArgs>? ParticipantFinished;
+        public int competitors;
         private int Threshold = 100; //hoeveel meter is een sectie
         private int laps = 3; //hoeveel rondjes moet een auto hebben gereden
         private int[] drivenLaps;
+        private int finishedParticipants = 0;
+        private Dictionary<String, double> lapTimes;
+        private Dictionary<String, DateTime> lapDateTimes;
 
         public Race(Track track, List<IParticipant> participants) {
             Track = track;
@@ -28,14 +32,20 @@ namespace Controller {
             _timer = new Timer();
             _timer.Interval = 500;
             _timer.Elapsed += OnTimedEvent;
+            lapTimes = new Dictionary<String, double>();
+            lapDateTimes = new Dictionary<String, DateTime>();
             assignStart();
             drivenLaps = new int[competitors];
             for (int i = 0; i < drivenLaps.Length; i++) {
                 drivenLaps[i] = 0;
             }
+
+            for (int i = 0; i < competitors; i++) {
+                lapDateTimes[participants[i].Name] = DateTime.Now;
+            }
             start();
         }
-        private SectionData getSectionData(Section section) {
+        public SectionData getSectionData(Section section) {
             if (!_positions.ContainsKey(section)) {
                 _positions[section] = new SectionData();
             }
@@ -76,7 +86,7 @@ namespace Controller {
             }
         }
         private void start() {
-            _timer.Start();
+            _timer?.Start();
             _timer.AutoReset = true;
         }
 
@@ -92,7 +102,7 @@ namespace Controller {
         private Section findNextSection(Section section, int sections) {
             Section next = section;
             for (int i = 0; i < sections; i++) {
-                if (next.Equals(Track.Sections.Last.Value)) {
+                if (next.Equals(Track.Sections.Last?.Value)) {
                     next = Track.Sections.First.Value;
                 } else {
                     next = Track.Sections.Find(section).Next.Value;
@@ -145,6 +155,11 @@ namespace Controller {
             
             //als de driver is gefinished, haal plaats hem niet meer
             if (drivenLaps[Participants.IndexOf(driver)] >= laps) {
+                if (finishedParticipants < 3) {
+                    driver.Points += (3 - finishedParticipants);
+                    finishedParticipants++;
+                }
+                ParticipantFinished?.Invoke(this, new UpdateRaceStatsArgs(this));
                 return;
             }
 
@@ -154,10 +169,14 @@ namespace Controller {
             for (int i = 0; i < distance; i++) {
                 if (section.SectionType.Equals(SectionTypes.Finish)) {
                     drivenLaps[Participants.IndexOf(driver)] += 1;
+
+                    lapTimes[driver.Name] = (DateTime.Now - lapDateTimes[driver.Name]).TotalSeconds;
+                    lapDateTimes[driver.Name] = DateTime.Now;
                     break;
                 } else {
                     section = findNextSection(section, 1);
                 }
+                ParticipantFinished?.Invoke(this, new UpdateRaceStatsArgs(this));
             }
 
             //zoniet plaats hem
@@ -187,7 +206,7 @@ namespace Controller {
 
 
         //timer event
-        private void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e) {
+        private void OnTimedEvent(Object? source, System.Timers.ElapsedEventArgs e) {
             Boolean driversChanged = false;
             Boolean everyoneFinished = true;
             Section nextSection;
@@ -251,6 +270,7 @@ namespace Controller {
         public void Cleanup() {
             _timer.Stop();
             DriversChanged = null;
+            ParticipantFinished = null;
         }
 
         private void checkBroken() {

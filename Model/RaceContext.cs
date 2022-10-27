@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace Model {
     public class RaceContext : INotifyPropertyChanged {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private static string currentTrackName;
-        public string publicTrackName {
+        private static string? currentTrackName;
+        public string? publicTrackName {
             get => currentTrackName;
             set {
                 currentTrackName = value;
