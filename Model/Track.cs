@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Model {
     public class Track {
-        public String Name;
+        public String Name { get; set; }
         public LinkedList<Section> Sections;
         public int rotationINT;
 
