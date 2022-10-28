@@ -23,7 +23,7 @@ namespace RaceSim {
             Data.currentRace.DriversChanged += OnDriversChanged;
         }
 
-        public static void OnNextRaceEvent(object sender, NextRaceArgs e) {
+        public static void OnNextRaceEvent(object? sender, NextRaceArgs e) {
             initialize();
             drawTrack(e.race.Track);
         }
