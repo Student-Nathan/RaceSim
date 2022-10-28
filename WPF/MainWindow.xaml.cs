@@ -27,6 +27,7 @@ namespace WPF {
         DriverStats? driverScreen;
         RaceContext? raceContext;
         CompetitionContext? competitionContext;
+        RaceStatsContext? raceStatsContext;
 
         public MainWindow() {
             InitializeComponent();
@@ -34,11 +35,16 @@ namespace WPF {
             Data.nextRaceEvent += GUIVisual.OnNextRace;
             Data.nextRaceEvent += this.OnNextRace;
             competitionContext = new CompetitionContext();
+            raceStatsContext = new RaceStatsContext();
             Data.nextRaceEvent += competitionContext.OnNextRace;
+            Data.nextRaceEvent += raceStatsContext.OnUpdatedStats;
+
+
             //GUIVisual.drawingReady += this.OnDrawingReady;
             raceContext = new RaceContext();
             NameLabel.DataContext = raceContext;
             Data.nextRace();
+
 
             //Data.currentRace.DriversChanged += raceContext.OnDriversChanged;
             //Data.currentRace.DriversChanged += this.OnDriversChanged;
@@ -55,6 +61,7 @@ namespace WPF {
         public void OnNextRace(object? sender, NextRaceArgs e) {
             Data.currentRace.DriversChanged += this.OnDriversChanged;
             Data.currentRace.DriversChanged += raceContext.OnDriversChanged;
+            Data.currentRace.ParticipantFinished += raceStatsContext.OnNextLap;
         }
         public void OnDrawingReady(object sender, NextRaceArgs e) {
             this.MainScreen.Dispatcher.BeginInvoke(
@@ -76,7 +83,7 @@ namespace WPF {
         }
 
         private void MenuItem_RaceStat_Click(object sender, RoutedEventArgs e) {
-            raceScreen = new RaceStats();
+            raceScreen = new RaceStats(raceStatsContext);
             raceScreen.Show();
         }
 

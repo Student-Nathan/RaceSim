@@ -48,9 +48,8 @@ namespace Controller{
             Track? next = Competition.NextTrack();
             if (next != null) {
 
-                Race race1 = new Race(next, Competition.Participants);
-                race1.RandomizeEquipment();
-                currentRace = race1;
+                currentRace = new Race(next, Competition.Participants);
+                currentRace.RandomizeEquipment();
                 nextRaceEvent?.Invoke(null, new NextRaceArgs(currentRace));
             } else {
                 currentRace = null;

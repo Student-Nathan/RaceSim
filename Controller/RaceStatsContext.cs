@@ -1,26 +1,37 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Controller {
-    internal class RaceStatsContext : INotifyPropertyChanged {
+    public class RaceStatsContext : INotifyPropertyChanged {
         public event PropertyChangedEventHandler? PropertyChanged;
-        public String number1 = "testString top 1";
-        public String number2 = "testString top 2";
-        public String number3 = "testString top 3";
-        public String number4 = "testString top 4";
-        public String number5 = "testString top 5";
+        public List<IParticipant>? EquipmentList { get; set; } = new List<IParticipant>();
+        public List<IParticipant>? lapTimes { get; set; } = new List<IParticipant>();
+        public double fastestLapTime { get; set; } = 0;
 
 
-        public void OnNextLap(Object sender, UpdateRaceStatsArgs e) {
-            List<String>top5 = new List<String>();
-            //top5= e.competition.
+
+        public void OnNextLap(Object? sender, UpdateRaceStatsArgs e) {
+            lapTimes = e.race.Participants.OrderBy(x => x.lapTime).Where(x => x.lapTime > 0).ToList<IParticipant>();
+            double tempLapTime = lapTimes.Select(x => x.lapTime).Where(x => x > 0).Min();
+            if (fastestLapTime == 0 || fastestLapTime > tempLapTime) {
+                fastestLapTime = tempLapTime;
+            }
+                    
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
         }
 
+        public void OnUpdatedStats(object? sender, NextRaceArgs e) {
+            EquipmentList = Data.Competition.Participants;
+            lapTimes = e.race.Participants.OrderBy(x => x.lapTime).Where(x => x.lapTime > 0).ToList<IParticipant>();
+            fastestLapTime = 0;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
+        }
     }
 }

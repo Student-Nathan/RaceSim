@@ -1,4 +1,5 @@
 ﻿using Model;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -21,27 +22,26 @@ namespace Controller {
         private int laps = 3; //hoeveel rondjes moet een auto hebben gereden
         private int[] drivenLaps;
         private int finishedParticipants = 0;
-        private Dictionary<String, double> lapTimes;
-        private Dictionary<String, DateTime> lapDateTimes;
+
 
         public Race(Track track, List<IParticipant> participants) {
             Track = track;
             Participants = participants;
             _positions = new Dictionary<Section, SectionData>();
+            StartTime = DateTime.Now;
             _random = new Random(DateTime.Now.Millisecond);
             _timer = new Timer();
             _timer.Interval = 500;
             _timer.Elapsed += OnTimedEvent;
-            lapTimes = new Dictionary<String, double>();
-            lapDateTimes = new Dictionary<String, DateTime>();
             assignStart();
             drivenLaps = new int[competitors];
             for (int i = 0; i < drivenLaps.Length; i++) {
                 drivenLaps[i] = 0;
             }
 
-            for (int i = 0; i < competitors; i++) {
-                lapDateTimes[participants[i].Name] = DateTime.Now;
+            for (int i = 0; i < participants.Count; i++) {
+                participants[i].lapTime = 0;
+                participants[i].previousTime = StartTime;
             }
             start();
         }
@@ -159,7 +159,6 @@ namespace Controller {
                     driver.Points += (3 - finishedParticipants);
                     finishedParticipants++;
                 }
-                ParticipantFinished?.Invoke(this, new UpdateRaceStatsArgs(this));
                 return;
             }
 
@@ -170,13 +169,13 @@ namespace Controller {
                 if (section.SectionType.Equals(SectionTypes.Finish)) {
                     drivenLaps[Participants.IndexOf(driver)] += 1;
 
-                    lapTimes[driver.Name] = (DateTime.Now - lapDateTimes[driver.Name]).TotalSeconds;
-                    lapDateTimes[driver.Name] = DateTime.Now;
+                    driver.lapTime = (DateTime.Now - driver.previousTime).TotalSeconds;
+                    driver.previousTime = DateTime.Now;
+                    ParticipantFinished?.Invoke(this, new UpdateRaceStatsArgs(this));
                     break;
                 } else {
                     section = findNextSection(section, 1);
                 }
-                ParticipantFinished?.Invoke(this, new UpdateRaceStatsArgs(this));
             }
 
             //zoniet plaats hem
@@ -271,6 +270,7 @@ namespace Controller {
             _timer.Stop();
             DriversChanged = null;
             ParticipantFinished = null;
+            
         }
 
         private void checkBroken() {

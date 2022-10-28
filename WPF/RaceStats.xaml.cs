@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,8 +18,9 @@ namespace WPF {
     /// Interaction logic for Window1.xaml
     /// </summary>
     public partial class RaceStats : Window {
-        public RaceStats() {
+        public RaceStats(RaceStatsContext statsContext) {
             InitializeComponent();
+            DataContext = statsContext;
         }
     }
 }
