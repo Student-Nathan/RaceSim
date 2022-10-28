@@ -22,7 +22,7 @@
         </ListView>
 
 
-        <ListView x:Name="Equipment" ItemsSource="{Binding EquipmentList}" d:ItemsSource="{d:SampleData ItemCount=10}" Margin="0,36,168,198">
+        <ListView x:Name="Equipment" ItemsSource="{Binding EquipmentList, Mode=OneWay}" d:ItemsSource="{d:SampleData ItemCount=10}" Margin="0,36,168,198">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name:" DisplayMemberBinding="{Binding Name}" Width="120" />

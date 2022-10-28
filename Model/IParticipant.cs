@@ -8,7 +8,7 @@ namespace Model {
     public interface IParticipant {
         public string Name { get; }
         public int Points { get; set; }
-        public IEquipment Equipment { get; }
+        public IEquipment Equipment { get; set; }
         public TeamColor TeamColor { get; }
         public double lapTime { get; set; }
         public DateTime previousTime { get; set; }
