@@ -62,9 +62,6 @@ namespace Controller {
                 participant.Equipment.Quality = _random.Next(1, 10);
                 participant.Equipment.Performance = _random.Next(5, 20);
                 participant.Equipment.Speed = _random.Next(4, 10);
-                //participant.Equipment.Speed = 30;
-                //participant.Equipment.Performance = 10;
-
             }
         }
 
@@ -123,41 +120,6 @@ namespace Controller {
             return next;
         }
 
-
-    
-
-        //private Section findNextSection(Section section, int sections) {
-        //    int newIndex = findIndex(section) + sections;
-        //    if (newIndex >= Track.Sections.Count) {
-        //        newIndex -= Track.Sections.Count;
-        //    }
-        //    Section next = Track.Sections.ElementAt(newIndex);
-        //    int i = 1;
-        //    while (getSectionData(next).Left is not null && getSectionData(next).Right is not null) {
-        //        if (i > sections) {
-        //            return section;
-        //        } else {
-        //            newIndex -= i;
-        //            if (newIndex < 0) {
-        //                newIndex = Track.Sections.Count + newIndex;
-        //            }
-        //            next = Track.Sections.ElementAt(newIndex);
-        //            i++;
-        //        }
-        //    }
-        //    return next;
-        //}
-
-        private int findIndex(Section section) {
-            int i = 0;
-            foreach(Section loopSection in Track.Sections) {
-                if (loopSection.Equals(section)) {
-                    break;
-                }
-                i++;
-            }
-            return i;
-        }
         //functie die de driver plaatst in de volgende sectie. 
         //driver wordt altijd op links geplaatst tenzij er een ander in dezelfde sectie staat
         private void placeDriverData(Section oldSection, Section newSection, IParticipant driver, int newDistance,int distance) {
@@ -165,7 +127,6 @@ namespace Controller {
             
 
 
-            //Section nextSection = section;
             //sectie om de laps bij te houden
 
             for (int i = 0; i < distance; i++) {
@@ -271,51 +232,6 @@ namespace Controller {
                 itterationSection = Track.Sections.Find(itterationSection).Previous?.Value;
             }
 
-            //foreach (Section section in Track.Sections) {
-            //    SectionData sectionData = getSectionData(section);
-            //    if (sectionData.Left is not null) { //wanneer er een driver op de linker positie staat
-            //        //berekening voor het vooruitgaan
-            //        if (!sectionData.Left.Equipment.IsBroken) {
-            //            sectionData.DistanceLeft += (sectionData.Left.Equipment.Performance * sectionData.Left.Equipment.Speed);
-            //            if (sectionData.DistanceLeft >= Threshold) {//wanneer de driver naar de volgende moet worden verplaatst
-            //                int sections = (int)sectionData.DistanceLeft / Threshold;//berekent de hoeveelheid secties die de driver naar voren moet
-            //                nextSection = findNextSection(section, sections);//zoekt de volgende sectie
-            //                int newDistance = (int)(sectionData.DistanceLeft - (Threshold * sections));//berekent de nieuwe distance om in de nieuwe sectie te plaatsen
-            //                if (nextSection.Equals(section)) {
-            //                    sectionData.DistanceLeft = Threshold;
-            //                } else {
-            //                    placeDriverData(section,nextSection, sectionData.Left, newDistance, (int)sections);
-            //                    removeDriverData(sectionData, true);
-            //                    driversChanged = true;
-            //                }
-            //            }
-            //        } else {
-            //            driversChanged = true;
-            //        }
-            //        everyoneFinished = false;
-            //    }
-            //    if (sectionData.Right is not null) {//zelfde, maar dan voor rechts
-            //        if (!sectionData.Right.Equipment.IsBroken) {
-            //            sectionData.DistanceRight += (sectionData.Right.Equipment.Performance * sectionData.Right.Equipment.Speed);
-            //            if (sectionData.DistanceRight >= Threshold) {
-            //                int sections = (int)sectionData.DistanceRight / Threshold;//berekent de hoeveelheid secties die de driver naar voren moet
-            //                nextSection = findNextSection(section, sections);//zoekt de volgende sectie
-            //                if (nextSection.Equals(section)) {
-            //                    sectionData.DistanceRight = Threshold;
-            //                } else {
-            //                    int newDistance = (int)(sectionData.DistanceRight - (Threshold * sections));//berekent de nieuwe distance om in de nieuwe sectie te plaatsen
-            //                    placeDriverData(section,nextSection, sectionData.Right, newDistance, (int)sections);
-            //                    removeDriverData(sectionData, false);
-            //                }
-            //                driversChanged = true;
-
-            //            }
-            //        } else {
-            //            driversChanged = true;
-            //        }
-            //        everyoneFinished = false;
-            //    }
-            //}
             if (driversChanged) {
                 if (DriversChanged is not null) {
                     DriversChanged.Invoke(this, new DriversChangedEventArgs(Data.currentRace.Track));//raises the driversChanged event
