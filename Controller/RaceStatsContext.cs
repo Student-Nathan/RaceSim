@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 namespace Controller {
     public class RaceStatsContext : INotifyPropertyChanged {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private int i = 0;
         public List<IParticipant>? EquipmentList { get; set; }
         public List<IParticipant>? lapTimes { get; set; }
         public double fastestLapTime { get; set; } = 0;
