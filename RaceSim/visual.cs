@@ -20,7 +20,7 @@ namespace RaceSim {
         private static int posY;
         private static int graphicLength=4;
         public static void initialize() {
-            Data.currentRace.DriversChanged += OnDriversChanged;
+            Data.CurrentRace.DriversChanged += OnDriversChanged;
         }
 
         public static void OnNextRaceEvent(object? sender, NextRaceArgs e) {
@@ -74,7 +74,7 @@ namespace RaceSim {
                 foreach (String sectionPart in getGraphics(section, rotation)) {//draws every part of a sectionType
                     Console.SetCursorPosition(posX, posY);
                     posY += 1;
-                    Console.WriteLine(replacePlaceholders(sectionPart,Data.currentRace.getSectionData(section).Left, Data.currentRace.getSectionData(section).Right));
+                    Console.WriteLine(replacePlaceholders(sectionPart,Data.CurrentRace.getSectionData(section).Left, Data.CurrentRace.getSectionData(section).Right));
                 }
                 posY -= graphicLength;
                 switch (section.SectionType) {//switch to rotate every section properly and compensate for the empty sectiontype
@@ -159,8 +159,8 @@ namespace RaceSim {
             throw new Exception("No graphic found");
         }
 
-        private static String replacePlaceholders(String sectionPart, IParticipant left, IParticipant right) {
-            if (left != null) {
+        private static String replacePlaceholders(String sectionPart, IParticipant? left, IParticipant? right) {
+            if (left is not null) {
                 if (left.Equipment.IsBroken) {
                     sectionPart = sectionPart.Replace("1", "X");
                 } else {
@@ -169,7 +169,7 @@ namespace RaceSim {
             } else {
                 sectionPart = sectionPart.Replace("1", " ");
             }
-            if (right != null) {
+            if (right is not null) {
                 if (right.Equipment.IsBroken) {
                     sectionPart = sectionPart.Replace("2", "X");
                 } else {

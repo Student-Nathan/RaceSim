@@ -5,18 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF"
         xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="WPF.RaceStats"
+        ResizeMode="NoResize"
         mc:Ignorable="d"
         Title="Race Stats" Height="450" Width="800">
-    <Window.DataContext>
-        <Controller:RaceStatsContext/>
-    </Window.DataContext>
+
     <Grid>
-        <ListView x:Name="Laptimes" ItemsSource="{Binding lapTimes}" d:ItemsSource="{d:SampleData ItemCount=10}" Margin="0,268,400,0">
+        <ListView x:Name="Laptimes" ItemsSource="{Binding lapTimes}" d:ItemsSource="{d:SampleData ItemCount=10}" Margin="0,268,282,0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name:" DisplayMemberBinding="{Binding Name}" Width="120" />
                     <GridViewColumn Header="Color:" DisplayMemberBinding="{Binding TeamColor}" Width="120"/>
                     <GridViewColumn Header="Laptime:" DisplayMemberBinding="{Binding lapTime}" Width="120"/>
+                    <GridViewColumn Header="Lap:" DisplayMemberBinding="{Binding Laps}" Width="120"/>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -35,8 +35,8 @@
         </ListView>
         <Label Content="Participant Equipment" HorizontalAlignment="Left" Margin="1,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Laptimes leaderboard" HorizontalAlignment="Left" Margin="2,242,0,0" VerticalAlignment="Top"/>
-        <Label Content="Best laptime: " HorizontalAlignment="Left" Margin="415,268,0,0" VerticalAlignment="Top"/>
-        <Label Content="{Binding fastestLapTime}" HorizontalAlignment="Left" Margin="529,268,0,0" VerticalAlignment="Top"/>
+        <Label Content="Best laptime: " HorizontalAlignment="Left" Margin="538,268,0,0" VerticalAlignment="Top"/>
+        <Label Content="{Binding fastestLapTime}" HorizontalAlignment="Left" Margin="652,268,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

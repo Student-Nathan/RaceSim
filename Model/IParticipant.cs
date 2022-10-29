@@ -10,6 +10,8 @@ namespace Model {
         public int Points { get; set; }
         public IEquipment Equipment { get; set; }
         public TeamColor TeamColor { get; }
+        public int Laps { get; set; }
+
         public double lapTime { get; set; }
         public DateTime previousTime { get; set; }
 

@@ -25,8 +25,6 @@ namespace ControllerTest {
             section1 = track.Sections.ElementAt(0);
             section2 = track.Sections.ElementAt(1);
             section3 = track.Sections.ElementAt(2);
-
-            race = new Race(track, true);
         }
         [Test]
         public void Race_initialised() {

@@ -22,7 +22,6 @@ namespace Controller {
         public int competitors;
         private int Threshold = 100; //hoeveel meter is een sectie
         private int laps = 3; //hoeveel rondjes moet een auto hebben gereden
-        private int[] drivenLaps;
         private int finishedParticipants = 0;
 
 
@@ -36,20 +35,15 @@ namespace Controller {
             _timer.Interval = 500;
             _timer.Elapsed += OnTimedEvent;
             assignStart();
-            drivenLaps = new int[competitors];
-            for (int i = 0; i < drivenLaps.Length; i++) {
-                drivenLaps[i] = 0;
-            }
 
             for (int i = 0; i < participants.Count; i++) {
                 participants[i].lapTime = 0;
                 participants[i].previousTime = StartTime;
+                participants[i].Laps = 0;
             }
             start();
         }
-        public Race(Track track,bool test) {//constructor for test purposes
-            Track = track;
-        }
+
         public SectionData getSectionData(Section section) {
             if (!_positions.ContainsKey(section)) {
                 _positions[section] = new SectionData();
@@ -91,8 +85,10 @@ namespace Controller {
             }
         }
         private void start() {
-            _timer?.Start();
-            _timer.AutoReset = true;
+            if (_timer is not null) {
+                _timer.Start();
+                _timer.AutoReset = true;
+            }
         }
 
         #region moveParticipants
@@ -106,6 +102,12 @@ namespace Controller {
 
         private Section findNextSection(Section section, int sections) {
             Section next = section;
+            if (Track.Sections is null) {
+                throw new NullReferenceException("Error: Track.Sections is null");
+            }
+            if (Track.Sections.First is null || Track.Sections.Last is null) {
+                throw new NullReferenceException("Error Track.Sections is null");
+            }
             for (int i = 0; i < sections; i++) {
                 if (next.Equals(Track.Sections.Last?.Value)) {
                     next = Track.Sections.First.Value;
@@ -117,6 +119,7 @@ namespace Controller {
             if (nextData.Left is not null && nextData.Right is not null) {
                 return section;
             }
+
             return next;
         }
 
@@ -131,7 +134,7 @@ namespace Controller {
 
             for (int i = 0; i < distance; i++) {
                 if (oldSection.SectionType.Equals(SectionTypes.Finish)) {
-                    drivenLaps[Participants.IndexOf(driver)] += 1;
+                    driver.Laps += 1;
 
                     driver.lapTime = (DateTime.Now - driver.previousTime).TotalSeconds;
                     driver.previousTime = DateTime.Now;
@@ -143,7 +146,7 @@ namespace Controller {
             }
 
             //als de driver is gefinished, plaats hem niet meer
-            if (drivenLaps[Participants.IndexOf(driver)] >= laps) {
+            if (driver.Laps >= laps) {
                 if (finishedParticipants < 3) {
                     driver.Points += (3 - finishedParticipants);
                     finishedParticipants++;
@@ -182,10 +185,15 @@ namespace Controller {
             Boolean driversChanged = false;
             Boolean everyoneFinished = true;
             Section nextSection;
+            Section? itterationSection;
             checkBroken();
             //doorloopt alle secties in de race
-            Section? itterationSection = Track.Sections.Last.Value;
-            while(itterationSection is not null) {
+            if (Track.Sections.Last is not null) {
+               itterationSection = Track.Sections.Last.Value;
+            } else {
+                throw new NullReferenceException("Error: No Sections in Track.Sections");
+            }
+            while (itterationSection is not null) {
                 SectionData sectionData = getSectionData(itterationSection);
                 if (sectionData.Left is not null) { //wanneer er een driver op de linker positie staat
                     //berekening voor het vooruitgaan
@@ -229,21 +237,25 @@ namespace Controller {
                     }
                     everyoneFinished = false;
                 }
-                itterationSection = Track.Sections.Find(itterationSection).Previous?.Value;
+                itterationSection = Track.Sections.Find(itterationSection)?.Previous?.Value;
             }
 
             if (driversChanged) {
                 if (DriversChanged is not null) {
-                    DriversChanged.Invoke(this, new DriversChangedEventArgs(Data.currentRace.Track));//raises the driversChanged event
+                    if (Data.CurrentRace is not null) {
+                        DriversChanged?.Invoke(this, new DriversChangedEventArgs(Data.CurrentRace.Track));//raises the driversChanged event
+                    }
                 }
             }
             if (everyoneFinished) {
-                Data.nextRace();
+                Data.NextRace();
             }
         }
         #endregion
         public void Cleanup() {
-            _timer.Stop();
+            if (_timer is not null) {
+                _timer.Stop();
+            }
             DriversChanged = null;
             ParticipantFinished = null;
             

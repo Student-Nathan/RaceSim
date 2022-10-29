@@ -32,18 +32,18 @@ namespace WPF {
         public MainWindow() {
             InitializeComponent();
             Data.Initialize(true);
-            Data.nextRaceEvent += GUIVisual.OnNextRace;
-            Data.nextRaceEvent += this.OnNextRace;
+            Data.NextRaceEvent += GUIVisual.OnNextRace;
+            Data.NextRaceEvent += this.OnNextRace;
             competitionContext = new CompetitionContext();
             raceStatsContext = new RaceStatsContext();
-            Data.nextRaceEvent += competitionContext.OnNextRace;
-            Data.nextRaceEvent += raceStatsContext.OnUpdatedStats;
+            Data.NextRaceEvent += competitionContext.OnNextRace;
+            Data.NextRaceEvent += raceStatsContext.OnUpdatedStats;
 
 
             //GUIVisual.drawingReady += this.OnDrawingReady;
             raceContext = new RaceContext();
             NameLabel.DataContext = raceContext;
-            Data.nextRace();
+            Data.NextRace();
 
 
             //Data.currentRace.DriversChanged += raceContext.OnDriversChanged;
@@ -59,9 +59,21 @@ namespace WPF {
             }));
         }
         public void OnNextRace(object? sender, NextRaceArgs e) {
-            Data.currentRace.DriversChanged += this.OnDriversChanged;
-            Data.currentRace.DriversChanged += raceContext.OnDriversChanged;
-            Data.currentRace.ParticipantFinished += raceStatsContext.OnNextLap;
+            if (Data.CurrentRace is not null) {
+                Data.CurrentRace.DriversChanged += this.OnDriversChanged;
+            } else {
+                throw new NullReferenceException("Error: Data.currentRace is null");
+            }
+            if (raceContext is not null) {
+                Data.CurrentRace.DriversChanged += raceContext.OnDriversChanged;
+            } else {
+                throw new NullReferenceException("Error: raceContext is null");
+            }
+            if (raceStatsContext is not null) {
+                Data.CurrentRace.ParticipantFinished += raceStatsContext.OnNextLap;
+            } else {
+                throw new NullReferenceException("Error: raceStatsContext is null");
+            }
         }
         public void OnDrawingReady(object sender, NextRaceArgs e) {
             this.MainScreen.Dispatcher.BeginInvoke(
@@ -83,12 +95,20 @@ namespace WPF {
         }
 
         private void MenuItem_RaceStat_Click(object sender, RoutedEventArgs e) {
-            raceScreen = new RaceStats(raceStatsContext);
+            if (raceStatsContext is not null) {
+                raceScreen = new RaceStats(raceStatsContext);
+            } else {
+                throw new NullReferenceException("Error: raceStatsContext is null");
+            }
             raceScreen.Show();
         }
 
         private void MenuItem_DriverStat_Click(object sender, RoutedEventArgs e) {
-            driverScreen = new DriverStats(competitionContext);
+            if (competitionContext is not null) {
+                driverScreen = new DriverStats(competitionContext);
+            } else {
+                throw new NullReferenceException("Error: competitionContext is null");
+            }
             driverScreen.Show();
         }
     }

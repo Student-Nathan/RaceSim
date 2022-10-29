@@ -13,6 +13,7 @@ namespace Model {
         public IEquipment Equipment { get; set; }
 
         public TeamColor TeamColor { get; set; }
+        public int Laps { get; set; }
         public double lapTime { get; set; }
         public DateTime previousTime { get; set; }
 

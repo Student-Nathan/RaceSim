@@ -9,8 +9,8 @@ using Model;
 namespace Controller{
     public static class Data {
         public static Competition? Competition;
-        public static Race ?currentRace;
-        public static event EventHandler<NextRaceArgs>? nextRaceEvent;
+        public static Race ?CurrentRace;
+        public static event EventHandler<NextRaceArgs>? NextRaceEvent;
         private static Boolean GUI = false;
 
         public static void Initialize(Boolean gui) {
@@ -21,10 +21,10 @@ namespace Controller{
         public static void Initialize() {
             Competition = new Competition();
             
-            addTracks();
-            addParticipants();
+            AddTracks();
+            AddParticipants();
         }
-        public static void addParticipants() {
+        public static void AddParticipants() {
             Driver driver1 = new Driver("TestDriver",TeamColor.Red);
             Competition?.Participants.Add(driver1);
             Driver driver2 = new Driver("DestDriver2",TeamColor.Green);
@@ -40,25 +40,25 @@ namespace Controller{
 
         }
 
-        public static void nextRace() {
+        public static void NextRace() {
             if (!GUI) {
                 Console.Clear();
             }
-            currentRace?.Cleanup();
+            CurrentRace.Cleanup();
             Track? next = Competition.NextTrack();
             if (next != null) {
 
-                currentRace = new Race(next, Competition.Participants);
-                currentRace.RandomizeEquipment();
-                nextRaceEvent?.Invoke(null, new NextRaceArgs(currentRace));
+                CurrentRace = new Race(next, Competition.Participants);
+                CurrentRace.RandomizeEquipment();
+                NextRaceEvent?.Invoke(null, new NextRaceArgs(CurrentRace));
             } else {
-                currentRace = null;
+                CurrentRace = null;
             }
             
         }
         
 
-        public static void addTracks() {
+        public static void AddTracks() {
             //Track track1 = new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish }, 3);
             Track track1 = new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Straight },3);
 

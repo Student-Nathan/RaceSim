@@ -6,14 +6,13 @@
         xmlns:local="clr-namespace:WPF"
         xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="WPF.DriverStats"
         mc:Ignorable="d"
+        ResizeMode="NoResize"
         Title="Competition Stats" Height="320" Width="250">
 
-    <Window.DataContext>
-        <Controller:CompetitionContext/>
-    </Window.DataContext>
+
 
     <Grid>
-        <ListView Name="LeaderBoard" ItemsSource="{Binding leaderBoard}" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,0,134">
+        <ListView Name="LeaderBoard" ItemsSource="{Binding leaderBoard}" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,0,134" HorizontalAlignment="Right" Width="250">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name:" DisplayMemberBinding="{Binding Name}" Width="120" />
@@ -22,7 +21,7 @@
             </ListView.View>
         </ListView>
 
-        <ListView Name="NextTracks" ItemsSource="{Binding trackNameList}" Margin="0,160,0,0" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView Name="NextTracks" ItemsSource="{Binding trackNameList}" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Center" Width="250" Height="144" VerticalAlignment="Bottom">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Volgende Tracks:" DisplayMemberBinding="{Binding Name}" />

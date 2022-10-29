@@ -50,10 +50,15 @@ namespace WPF {
                 if (!sectionCoords.ContainsKey(section)) {
                     sectionCoords[section] = new int[2] {posX,posY};
                 }
-                SectionData sectionData = Data.currentRace.getSectionData(section);
+                SectionData sectionData;
+                if (Data.CurrentRace is not null) {
+                    sectionData = Data.CurrentRace.getSectionData(section);
+                } else {
+                    throw new NullReferenceException("Error: currentRace is null");
+                }
                 g.DrawImage(getGraphics(section, rotation), new Point(posX, posY));
                 drawParticipants(plaatje, section, sectionData.Left, sectionData.Right, rotation);
-
+                
 
                 switch (section.SectionType) {//switch to rotate every section properly and compensate for the empty sectiontype
                     case SectionTypes.LeftCorner:
@@ -213,7 +218,7 @@ namespace WPF {
             throw new Exception("No graphic found");
         }
 
-        private static Bitmap drawParticipants(Bitmap plaatje, Section section, IParticipant left, IParticipant right, Rotation rotation){
+        private static Bitmap drawParticipants(Bitmap plaatje, Section section, IParticipant? left, IParticipant? right, Rotation rotation){
             Graphics g = Graphics.FromImage(plaatje);
             int[] sectionCoord = sectionCoords[section];
             if(left is not null) {
