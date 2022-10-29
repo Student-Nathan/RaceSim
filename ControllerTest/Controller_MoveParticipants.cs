@@ -27,10 +27,6 @@ namespace ControllerTest {
             section3 = track.Sections.ElementAt(2);
         }
         [Test]
-        public void Race_initialised() {
-            Assert.AreEqual(track, race.Track);
-        }
-        [Test]
         public void NextSection_returns_section2() {
             Section test = TestFindNextSection(section1, 1);
             Assert.AreEqual(test, section2);

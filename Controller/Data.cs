@@ -44,8 +44,8 @@ namespace Controller{
             if (!GUI) {
                 Console.Clear();
             }
-            CurrentRace.Cleanup();
-            Track? next = Competition.NextTrack();
+            CurrentRace?.Cleanup();
+            Track? next = Competition?.NextTrack();
             if (next != null) {
 
                 CurrentRace = new Race(next, Competition.Participants);
