@@ -18,14 +18,18 @@ namespace RaceSim {
         private static Rotation rotation;
         private static int posX;
         private static int posY;
-        private static int graphicLength=4;
-        public static void initialize() {
-            Data.CurrentRace.DriversChanged += OnDriversChanged;
+        private static readonly int graphicLength=4;
+        public static void Initialize() {
+            if (Data.CurrentRace is not null) {
+                Data.CurrentRace.DriversChanged += OnDriversChanged;
+            } else {
+                throw new Exception("Error: There is no current race");
+            }
         }
 
         public static void OnNextRaceEvent(object? sender, NextRaceArgs e) {
-            initialize();
-            drawTrack(e.race.Track);
+            Initialize();
+            DrawTrack(e.race.Track);
         }
 
         #region graphics
@@ -60,7 +64,7 @@ namespace RaceSim {
 
  
 
-        private static void drawTrack(Track track) {
+        private static void DrawTrack(Track track) {
             
             switch (track.rotationINT) {
                 case 0: rotation = Rotation.WestEast; break;
@@ -68,13 +72,13 @@ namespace RaceSim {
                 case 2: rotation = Rotation.EastWest; break;
                 case 3: rotation = Rotation.SouthNorth; break;
             }
-            resetTrack();
+            ResetTrack();
             Console.WriteLine(track.Name);
             foreach (Section section in track.Sections) {
-                foreach (String sectionPart in getGraphics(section, rotation)) {//draws every part of a sectionType
+                foreach (String sectionPart in GetGraphics(section, rotation)) {//draws every part of a sectionType
                     Console.SetCursorPosition(posX, posY);
                     posY += 1;
-                    Console.WriteLine(replacePlaceholders(sectionPart,Data.CurrentRace.getSectionData(section).Left, Data.CurrentRace.getSectionData(section).Right));
+                    Console.WriteLine(ReplacePlaceholders(sectionPart,Data.CurrentRace.getSectionData(section).Left, Data.CurrentRace.getSectionData(section).Right));
                 }
                 posY -= graphicLength;
                 switch (section.SectionType) {//switch to rotate every section properly and compensate for the empty sectiontype
@@ -106,13 +110,13 @@ namespace RaceSim {
             }
         }
 
-        private static void resetTrack() {
+        private static void ResetTrack() {
             Console.Clear();
             posX = 0;
             posY = 1;
         }
 
-        private static String[] getGraphics(Section section, Rotation rotation) {
+        public static String[] GetGraphics(Section section, Rotation rotation) {
             switch (section.SectionType) {
                 case SectionTypes.Empty: return _empty;
                 case SectionTypes.Straight:
@@ -128,7 +132,7 @@ namespace RaceSim {
                         case Rotation.WestEast: return _cornerSw;
                         case Rotation.NorthSouth: return _cornerSe;
                         case Rotation.EastWest: return _cornerNe;
-                        case Rotation.SouthNorth: return _straightHorizontal;
+                        case Rotation.SouthNorth: return _cornerNw;
                     }
                     break;
                 case (SectionTypes.RightCorner):
@@ -159,7 +163,7 @@ namespace RaceSim {
             throw new Exception("No graphic found");
         }
 
-        private static String replacePlaceholders(String sectionPart, IParticipant? left, IParticipant? right) {
+        public static String ReplacePlaceholders(String sectionPart, IParticipant? left, IParticipant? right) {
             if (left is not null) {
                 if (left.Equipment.IsBroken) {
                     sectionPart = sectionPart.Replace("1", "X");
@@ -182,7 +186,7 @@ namespace RaceSim {
         }
 
         private static void OnDriversChanged(object? sender, DriversChangedEventArgs e) {
-            drawTrack(e.Track);
+            DrawTrack(e.Track);
         }
     }
     //plan van aanpak:
