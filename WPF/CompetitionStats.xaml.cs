@@ -17,8 +17,8 @@ namespace WPF {
     /// <summary>
     /// Interaction logic for Window2.xaml
     /// </summary>
-    public partial class DriverStats : Window {
-        public DriverStats(CompetitionContext context) {
+    public partial class CompetitionStats : Window {
+        public CompetitionStats(CompetitionContext context) {
             InitializeComponent();
             DataContext = context;
         }

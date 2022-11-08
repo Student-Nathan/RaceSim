@@ -24,7 +24,7 @@ namespace WPF {
     /// </summary>
     public partial class MainWindow : Window {
         RaceStats? raceScreen;
-        DriverStats? driverScreen;
+        CompetitionStats? driverScreen;
         RaceContext? raceContext;
         CompetitionContext? competitionContext;
         RaceStatsContext? raceStatsContext;
@@ -105,7 +105,7 @@ namespace WPF {
 
         private void MenuItem_DriverStat_Click(object sender, RoutedEventArgs e) {
             if (competitionContext is not null) {
-                driverScreen = new DriverStats(competitionContext);
+                driverScreen = new CompetitionStats(competitionContext);
             } else {
                 throw new NullReferenceException("Error: competitionContext is null");
             }

@@ -1,12 +1,6 @@
 ﻿using Controller;
 using Model;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Assert = NUnit.Framework.Assert;
 
 namespace ControllerTest {
@@ -16,45 +10,76 @@ namespace ControllerTest {
         Section section1;
         Section section2;
         Section section3;
+        Driver driver1;
+        Driver driver2;
+        Driver driver3;
         Track track;
 
 
         [SetUp]
         public void Setup() {
+
             track = new Track("UnitTest", new SectionTypes[] { SectionTypes.StartGrid,SectionTypes.Straight,SectionTypes.RightCorner},3);
             section1 = track.Sections.ElementAt(0);
             section2 = track.Sections.ElementAt(1);
             section3 = track.Sections.ElementAt(2);
+            driver1 = new Driver("Driver1",TeamColor.Red);
+            driver2 = new Driver("Driver2", TeamColor.Green);
+            driver3 = new Driver("Driver1", TeamColor.Yellow);
+            race = new Race(track, new List<IParticipant>() {driver1,driver2,driver3 },true);
         }
         [Test]
         public void NextSection_returns_section2() {
-            Section test = TestFindNextSection(section1, 1);
+            Section test = race.findNextSection(section1, 1);
             Assert.AreEqual(test, section2);
         }
         [Test]
         public void NextSection_returns_section3() {
-            Section test = TestFindNextSection(section1, 2);
+            Section test = race.findNextSection(section1, 2);
             Assert.AreEqual(section3, test);
         }
 
         [Test]
         public void NextSection_returns_section1() {
-            Section test = TestFindNextSection(section1, 3);
+            Section test = race.findNextSection(section1, 3);
             Assert.AreEqual(section1, test);
         }
-
-
-        public Section TestFindNextSection(Section section, int sections) {
-            Section next = section;
-            for (int i = 0; i < sections; i++) {
-                if (next.Equals(track.Sections.Last?.Value)) {
-                    Console.WriteLine("Last detected");
-                    next = track.Sections.First.Value;
-                } else {
-                    next = track.Sections.Find(next).Next.Value;
-                }
-            }
-            return next;
+        [Test]
+        public void placeDriverData_places_driver1_in_section2_left() {
+            race.placeDriverData(section1, section2, driver1, 10, 1);
+            SectionData sectionData = race.getSectionData(section2);
+            Assert.AreEqual(sectionData.Left, driver1);
+        }
+        [Test]
+        public void placeDriverData_places_driver2_in_section2_right() {
+            race.placeDriverData(section1, section2, driver1, 10, 1);
+            race.placeDriverData(section1, section2, driver2, 10, 1);
+            SectionData sectionData = race.getSectionData(section2);
+            Assert.AreEqual(sectionData.Right, driver2);
+        }
+        [Test]
+        public void placeDriverData_throws_exception() {
+            race.placeDriverData(section1, section2, driver1, 10, 1);
+            race.placeDriverData(section1, section2, driver2, 10, 1);
+            Assert.That(() => race.placeDriverData(section1, section2, driver3, 10, 1), Throws.Exception);
+        }
+        [Test]
+        public void removeDriverData_removes_section2_left() {
+            SectionData sectionData = race.getSectionData(section2);
+            race.placeDriverData(section1, section2, driver1, 10, 1);
+            race.placeDriverData(section1, section2, driver2, 10, 1);
+            race.removeDriverData(sectionData, true);
+            Assert.IsNull(sectionData.Left);
+            Assert.IsNotNull(sectionData.Right);
+        }
+        [Test]
+        public void removeDriverData_removes_section2_right() {
+            SectionData sectionData = race.getSectionData(section2);
+            race.placeDriverData(section1, section2, driver1, 10, 1);
+            race.placeDriverData(section1, section2, driver2, 10, 1);
+            race.removeDriverData(sectionData, false);
+            Assert.IsNull(sectionData.Right);
+            Assert.IsNotNull(sectionData.Left);
         }
     }
 }

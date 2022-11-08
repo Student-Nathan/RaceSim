@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF"
-        xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="WPF.DriverStats"
+        xmlns:Controller="clr-namespace:Controller;assembly=Controller" x:Class="WPF.CompetitionStats"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="Competition Stats" Height="320" Width="250">

@@ -1,10 +1,4 @@
 ﻿using Model;
-using System.Collections.Concurrent;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Timers;
-using static System.Collections.Specialized.BitVector32;
 using Section = Model.Section;
 using Timer = System.Timers.Timer;
 
@@ -42,6 +36,23 @@ namespace Controller {
                 participants[i].Laps = 0;
             }
             start();
+        }
+        public Race(Track track, List<IParticipant> participants, Boolean test) {
+            Track = track;
+            Participants = participants;
+            _positions = new Dictionary<Section, SectionData>();
+            StartTime = DateTime.Now;
+            _random = new Random(DateTime.Now.Millisecond);
+            _timer = new Timer();
+            _timer.Interval = 500;
+            _timer.Elapsed += OnTimedEvent;
+            assignStart();
+
+            for (int i = 0; i < participants.Count; i++) {
+                participants[i].lapTime = 0;
+                participants[i].previousTime = StartTime;
+                participants[i].Laps = 0;
+            }
         }
 
         public SectionData getSectionData(Section section) {
@@ -100,7 +111,7 @@ namespace Controller {
         //3.1 zoek door de track naar de index van de huidige sectie en tel daar 1 bij op
         //4. stop de deelnemer in de goede sectiedata
 
-        private Section findNextSection(Section section, int sections) {
+        public Section findNextSection(Section section, int sections) {
             Section next = section;
             if (Track.Sections is null) {
                 throw new NullReferenceException("Error: Track.Sections is null");
@@ -125,7 +136,7 @@ namespace Controller {
 
         //functie die de driver plaatst in de volgende sectie. 
         //driver wordt altijd op links geplaatst tenzij er een ander in dezelfde sectie staat
-        private void placeDriverData(Section oldSection, Section newSection, IParticipant driver, int newDistance,int distance) {
+        public void placeDriverData(Section oldSection, Section newSection, IParticipant driver, int newDistance,int distance) {
             SectionData data = getSectionData(newSection);
             
 
@@ -167,7 +178,7 @@ namespace Controller {
         }
 
         //functie die de driver weghaalt van de oude positie
-        private void removeDriverData(SectionData data, Boolean left) {
+        public void removeDriverData(SectionData data, Boolean left) {
             if (left) {
                 data.Left = null;
                 data.DistanceLeft = 0;

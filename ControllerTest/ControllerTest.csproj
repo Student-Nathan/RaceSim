@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Controller\Controller.csproj" />
+    <ProjectReference Include="..\RaceSim\RaceSim.csproj" />
   </ItemGroup>
 
 </Project>
