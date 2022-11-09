@@ -24,18 +24,16 @@ namespace WPF {
         private static Rotation rotation;
         private static int posX;
         private static int posY;
-        private static int imageSize = 256/2-25;//calculation to compensate for the white spaces in the png's
+        private const int imageSize = 256/2-25;//calculation to compensate for the white spaces in the png's
         private const string folder = "C:\\Users\\School\\source\\repos\\RaceSim\\RaceSim\\WPF";
         private static Dictionary<Section, int[]> sectionCoords = new Dictionary<Section, int[]>();
-        //public static event EventHandler<NextRaceArgs> drawingReady;
 
-        public static void initialize() {
+        public static void Initialize() {
         }
 
 
-        public static BitmapSource drawTrack(Track track) {
+        public static BitmapSource DrawTrack(Track track) {
             Bitmap plaatje = ImageHandler.GetBitmap("Empty");
-            //Bitmap plaatje = ImageHandler.getNewBitmap(900, 512);
             Graphics g = Graphics.FromImage(plaatje);
 
 
@@ -45,7 +43,7 @@ namespace WPF {
                 case 2: rotation = Rotation.EastWest; break;
                 case 3: rotation = Rotation.SouthNorth; break;
             }
-            resetTrack();
+            ResetTrack();
             foreach (Section section in track.Sections) {
                 if (!sectionCoords.ContainsKey(section)) {
                     sectionCoords[section] = new int[2] {posX,posY};
@@ -56,8 +54,8 @@ namespace WPF {
                 } else {
                     throw new NullReferenceException("Error: currentRace is null");
                 }
-                g.DrawImage(getGraphics(section, rotation), new Point(posX, posY));
-                drawParticipants(plaatje, section, sectionData.Left, sectionData.Right, rotation);
+                g.DrawImage(GetGraphics(section, rotation), new Point(posX, posY));
+                DrawParticipants(plaatje, section, sectionData.Left, sectionData.Right, rotation);
                 
 
                 switch (section.SectionType) {//switch to rotate every section properly and compensate for the empty sectiontype
@@ -88,16 +86,16 @@ namespace WPF {
             return ImageHandler.CreateBitmapSourceFromGdiBitmap(plaatje);
         }
 
-        public static void resetTrack() {
+        public static void ResetTrack() {
             posX = 0;
             posY = 0;
         }
 
         public static void OnNextRace(object? sender, NextRaceArgs e) {
             ImageHandler.clearCache();
-            int[] bounds = calculateBounds(e.race.Track);
+            int[] bounds = CalculateBounds(e.race.Track);
             ImageHandler.getNewBitmap(bounds[0], bounds[1]);
-            drawTrack(e.race.Track);
+            DrawTrack(e.race.Track);
            
             //drawingReady.Invoke(null, new NextRaceArgs(e.race));
         }
@@ -171,7 +169,7 @@ namespace WPF {
 
         #endregion
 
-        private static Bitmap getGraphics(Section section, Rotation rotation) {
+        private static Bitmap GetGraphics(Section section, Rotation rotation) {
             switch (section.SectionType) {
                 case SectionTypes.Empty: return ImageHandler.GetBitmap("empty");
                 case SectionTypes.Straight:
@@ -218,23 +216,23 @@ namespace WPF {
             throw new Exception("No graphic found");
         }
 
-        private static Bitmap drawParticipants(Bitmap plaatje, Section section, IParticipant? left, IParticipant? right, Rotation rotation){
+        private static Bitmap DrawParticipants(Bitmap plaatje, Section section, IParticipant? left, IParticipant? right, Rotation rotation){
             Graphics g = Graphics.FromImage(plaatje);
             int[] sectionCoord = sectionCoords[section];
             if(left is not null) {
                 switch (rotation) {
-                    case Rotation.WestEast: g.DrawImage(getDriverGraphics(left, rotation), new Point(sectionCoord[0]+20, sectionCoord[1]+20));break;
-                    case Rotation.NorthSouth: g.DrawImage(getDriverGraphics(left, rotation), new Point(sectionCoord[0]+55, sectionCoord[1]+40)); break;
-                    case Rotation.EastWest: g.DrawImage(getDriverGraphics(left, rotation), new Point(sectionCoord[0]+30, sectionCoord[1]+50)); break;
-                    case Rotation.SouthNorth: g.DrawImage(getDriverGraphics(left, rotation), new Point(sectionCoord[0]+20, sectionCoord[1]+40)); break;
+                    case Rotation.WestEast: g.DrawImage(GetDriverGraphics(left, rotation), new Point(sectionCoord[0]+20, sectionCoord[1]+20));break;
+                    case Rotation.NorthSouth: g.DrawImage(GetDriverGraphics(left, rotation), new Point(sectionCoord[0]+55, sectionCoord[1]+40)); break;
+                    case Rotation.EastWest: g.DrawImage(GetDriverGraphics(left, rotation), new Point(sectionCoord[0]+30, sectionCoord[1]+50)); break;
+                    case Rotation.SouthNorth: g.DrawImage(GetDriverGraphics(left, rotation), new Point(sectionCoord[0]+20, sectionCoord[1]+40)); break;
                 }
             }
             if (right is not null) {
                 switch (rotation) {
-                    case Rotation.WestEast: g.DrawImage(getDriverGraphics(right, rotation), new Point(sectionCoord[0]+20, sectionCoord[1]+55)); break;
-                    case Rotation.NorthSouth: g.DrawImage(getDriverGraphics(right, rotation), new Point(sectionCoord[0]+30, sectionCoord[1]+40)); break;
-                    case Rotation.EastWest: g.DrawImage(getDriverGraphics(right, rotation), new Point(sectionCoord[0]+30, sectionCoord[1]+20)); break;
-                    case Rotation.SouthNorth: g.DrawImage(getDriverGraphics(right, rotation), new Point(sectionCoord[0]+50, sectionCoord[1]+40)); break;
+                    case Rotation.WestEast: g.DrawImage(GetDriverGraphics(right, rotation), new Point(sectionCoord[0]+20, sectionCoord[1]+55)); break;
+                    case Rotation.NorthSouth: g.DrawImage(GetDriverGraphics(right, rotation), new Point(sectionCoord[0]+30, sectionCoord[1]+40)); break;
+                    case Rotation.EastWest: g.DrawImage(GetDriverGraphics(right, rotation), new Point(sectionCoord[0]+30, sectionCoord[1]+20)); break;
+                    case Rotation.SouthNorth: g.DrawImage(GetDriverGraphics(right, rotation), new Point(sectionCoord[0]+50, sectionCoord[1]+40)); break;
                 }
             }
 
@@ -242,7 +240,7 @@ namespace WPF {
         }
 
         //returns string with path to relevant driver graphic
-        private static Bitmap getDriverGraphics(IParticipant driver, Rotation rotation) {
+        private static Bitmap GetDriverGraphics(IParticipant driver, Rotation rotation) {
             if (driver.Equipment.IsBroken) {
                 return ImageHandler.GetBitmap(broken);
             }
@@ -300,7 +298,7 @@ namespace WPF {
             throw new Exception("GUI: Driver graphic not found");
         }
 
-        private static int[] calculateBounds(Track track) {
+        private static int[] CalculateBounds(Track track) {
             int rotationINT = track.rotationINT;
             int[] tempBounds = new int[4] { 1, 1, 1, 1 };
             int[] result = new int[2];

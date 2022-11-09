@@ -55,7 +55,7 @@ namespace WPF {
             DispatcherPriority.Render,
             new Action(() => {
                 this.MainScreen.Source = null;
-                this.MainScreen.Source = GUIVisual.drawTrack(e.Track);
+                this.MainScreen.Source = GUIVisual.DrawTrack(e.Track);
             }));
         }
         public void OnNextRace(object? sender, NextRaceArgs e) {
@@ -74,15 +74,6 @@ namespace WPF {
             } else {
                 throw new NullReferenceException("Error: raceStatsContext is null");
             }
-        }
-        public void OnDrawingReady(object sender, NextRaceArgs e) {
-            this.MainScreen.Dispatcher.BeginInvoke(
-            DispatcherPriority.Render,
-            new Action(() => {
-                this.MainScreen.Source = null;
-                this.MainScreen.Source = GUIVisual.drawTrack(e.race.Track);
-            }));
-            
         }
 
         private void MenuItem_Exit_Click(object sender, RoutedEventArgs e) {
