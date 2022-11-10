@@ -37,7 +37,7 @@ namespace WPF {
             Graphics g = Graphics.FromImage(plaatje);
 
 
-            switch (track.rotationINT) {
+            switch (track.RotationINT) {
                 case 0: rotation = Rotation.WestEast; break;
                 case 1: rotation = Rotation.NorthSouth; break;
                 case 2: rotation = Rotation.EastWest; break;
@@ -50,7 +50,7 @@ namespace WPF {
                 }
                 SectionData sectionData;
                 if (Data.CurrentRace is not null) {
-                    sectionData = Data.CurrentRace.getSectionData(section);
+                    sectionData = Data.CurrentRace.GetSectionData(section);
                 } else {
                     throw new NullReferenceException("Error: currentRace is null");
                 }
@@ -94,7 +94,7 @@ namespace WPF {
         public static void OnNextRace(object? sender, NextRaceArgs e) {
             ImageHandler.clearCache();
             int[] bounds = CalculateBounds(e.race.Track);
-            ImageHandler.getNewBitmap(bounds[0], bounds[1]);
+            ImageHandler.GetNewBitmap(bounds[0], bounds[1]);
             DrawTrack(e.race.Track);
            
             //drawingReady.Invoke(null, new NextRaceArgs(e.race));
@@ -299,7 +299,7 @@ namespace WPF {
         }
 
         private static int[] CalculateBounds(Track track) {
-            int rotationINT = track.rotationINT;
+            int rotationINT = track.RotationINT;
             int[] tempBounds = new int[4] { 1, 1, 1, 1 };
             int[] result = new int[2];
             foreach (Section section in track.Sections) {

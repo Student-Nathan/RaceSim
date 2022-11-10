@@ -30,54 +30,54 @@ namespace ControllerTest {
         }
         [Test]
         public void NextSection_returns_section2() {
-            Section test = race.findNextSection(section1, 1);
+            Section test = race.FindNextSection(section1, 1);
             Assert.AreEqual(test, section2);
         }
         [Test]
         public void NextSection_returns_section3() {
-            Section test = race.findNextSection(section1, 2);
+            Section test = race.FindNextSection(section1, 2);
             Assert.AreEqual(section3, test);
         }
 
         [Test]
         public void NextSection_returns_section1() {
-            Section test = race.findNextSection(section1, 3);
+            Section test = race.FindNextSection(section1, 3);
             Assert.AreEqual(section1, test);
         }
         [Test]
         public void placeDriverData_places_driver1_in_section2_left() {
-            race.placeDriverData(section1, section2, driver1, 10, 1);
-            SectionData sectionData = race.getSectionData(section2);
+            race.PlaceDriverData(section1, section2, driver1, 10, 1);
+            SectionData sectionData = race.GetSectionData(section2);
             Assert.AreEqual(sectionData.Left, driver1);
         }
         [Test]
         public void placeDriverData_places_driver2_in_section2_right() {
-            race.placeDriverData(section1, section2, driver1, 10, 1);
-            race.placeDriverData(section1, section2, driver2, 10, 1);
-            SectionData sectionData = race.getSectionData(section2);
+            race.PlaceDriverData(section1, section2, driver1, 10, 1);
+            race.PlaceDriverData(section1, section2, driver2, 10, 1);
+            SectionData sectionData = race.GetSectionData(section2);
             Assert.AreEqual(sectionData.Right, driver2);
         }
         [Test]
         public void placeDriverData_throws_exception() {
-            race.placeDriverData(section1, section2, driver1, 10, 1);
-            race.placeDriverData(section1, section2, driver2, 10, 1);
-            Assert.That(() => race.placeDriverData(section1, section2, driver3, 10, 1), Throws.Exception);
+            race.PlaceDriverData(section1, section2, driver1, 10, 1);
+            race.PlaceDriverData(section1, section2, driver2, 10, 1);
+            Assert.That(() => race.PlaceDriverData(section1, section2, driver3, 10, 1), Throws.Exception);
         }
         [Test]
         public void removeDriverData_removes_section2_left() {
-            SectionData sectionData = race.getSectionData(section2);
-            race.placeDriverData(section1, section2, driver1, 10, 1);
-            race.placeDriverData(section1, section2, driver2, 10, 1);
-            race.removeDriverData(sectionData, true);
+            SectionData sectionData = race.GetSectionData(section2);
+            race.PlaceDriverData(section1, section2, driver1, 10, 1);
+            race.PlaceDriverData(section1, section2, driver2, 10, 1);
+            race.RemoveDriverData(sectionData, true);
             Assert.IsNull(sectionData.Left);
             Assert.IsNotNull(sectionData.Right);
         }
         [Test]
         public void removeDriverData_removes_section2_right() {
-            SectionData sectionData = race.getSectionData(section2);
-            race.placeDriverData(section1, section2, driver1, 10, 1);
-            race.placeDriverData(section1, section2, driver2, 10, 1);
-            race.removeDriverData(sectionData, false);
+            SectionData sectionData = race.GetSectionData(section2);
+            race.PlaceDriverData(section1, section2, driver1, 10, 1);
+            race.PlaceDriverData(section1, section2, driver2, 10, 1);
+            race.RemoveDriverData(sectionData, false);
             Assert.IsNull(sectionData.Right);
             Assert.IsNotNull(sectionData.Left);
         }

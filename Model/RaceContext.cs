@@ -11,7 +11,7 @@ namespace Model {
     public class RaceContext : INotifyPropertyChanged {
         public event PropertyChangedEventHandler? PropertyChanged;
         private static string? currentTrackName;
-        public string? publicTrackName {
+        public string? PublicTrackName {
             get => currentTrackName;
             set {
                 currentTrackName = value;
@@ -25,10 +25,7 @@ namespace Model {
 
 
         public void OnDriversChanged(object? sender, DriversChangedEventArgs e) {
-            //publicTrackName = e.Track.Name;
-            publicTrackName = e.Track.Name;
-            //currentTrackName = "Test";
-            //RaiseProperChanged();
+            PublicTrackName = e.Track.Name;
         }
     }
 }

@@ -23,11 +23,11 @@ namespace WPF {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        RaceStats? raceScreen;
-        CompetitionStats? driverScreen;
-        RaceContext? raceContext;
-        CompetitionContext? competitionContext;
-        RaceStatsContext? raceStatsContext;
+        private RaceStats? raceScreen;
+        private CompetitionStats? driverScreen;
+        private RaceContext? raceContext;
+        private CompetitionContext? competitionContext;
+        private RaceStatsContext? raceStatsContext;
 
         public MainWindow() {
             InitializeComponent();

@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 namespace Model {
     public class Track {
         public String Name { get; set; }
-        public LinkedList<Section> Sections;
-        public int rotationINT;
+        public LinkedList<Section> Sections { get; set; }
+        public int RotationINT { get; set; }
 
         public Track(String name, SectionTypes[] sections, int rotationINT) {
             Name = name;
-            Sections = convertSections(sections);
-            this.rotationINT = rotationINT;
+            Sections = ConvertSections(sections);
+            this.RotationINT = rotationINT;
                      
         }
-        private LinkedList<Section> convertSections(SectionTypes[] sections) {
+        private LinkedList<Section> ConvertSections(SectionTypes[] sections) {
             LinkedList<Section> result = new LinkedList<Section>();
             foreach (SectionTypes type in sections) {
                 result.AddLast(new Section(type));

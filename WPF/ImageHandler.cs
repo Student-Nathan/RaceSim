@@ -13,7 +13,7 @@ using System.Drawing.Imaging;
 namespace WPF {
     public static class ImageHandler {
         private static Dictionary<String, Bitmap> bitmapData = new Dictionary<string, Bitmap>();
-        public static int imageSize = 256;
+        public static int ImageSize { get; set; } = 256;
 
         public static Bitmap GetBitmap(String path) {
             if (!bitmapData.ContainsKey(path)) {
@@ -26,7 +26,7 @@ namespace WPF {
             bitmapData.Clear();
         }
 
-        public static Bitmap getNewBitmap(int x, int y) {
+        public static Bitmap GetNewBitmap(int x, int y) {
             string key = "Empty";
             if (!bitmapData.ContainsKey(key)) {
                 Bitmap bitmap = new Bitmap(x, y);

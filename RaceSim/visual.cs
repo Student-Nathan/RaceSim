@@ -66,7 +66,7 @@ namespace RaceSim {
 
         private static void DrawTrack(Track track) {
             
-            switch (track.rotationINT) {
+            switch (track.RotationINT) {
                 case 0: rotation = Rotation.WestEast; break;
                 case 1: rotation = Rotation.NorthSouth; break;
                 case 2: rotation = Rotation.EastWest; break;
@@ -78,7 +78,7 @@ namespace RaceSim {
                 foreach (String sectionPart in GetGraphics(section, rotation)) {//draws every part of a sectionType
                     Console.SetCursorPosition(posX, posY);
                     posY += 1;
-                    Console.WriteLine(ReplacePlaceholders(sectionPart,Data.CurrentRace.getSectionData(section).Left, Data.CurrentRace.getSectionData(section).Right));
+                    Console.WriteLine(ReplacePlaceholders(sectionPart,Data.CurrentRace.GetSectionData(section).Left, Data.CurrentRace.GetSectionData(section).Right));
                 }
                 posY -= graphicLength;
                 switch (section.SectionType) {//switch to rotate every section properly and compensate for the empty sectiontype

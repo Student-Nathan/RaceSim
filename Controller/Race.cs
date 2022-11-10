@@ -13,8 +13,8 @@ namespace Controller {
         private static Timer? _timer;
         public event EventHandler<DriversChangedEventArgs>? DriversChanged;
         public event EventHandler<UpdateRaceStatsArgs>? ParticipantFinished;
-        public int competitors;
-        private int Threshold = 100; //hoeveel meter is een sectie
+        public int CurrentCompetitorNumber { get; set; } //aanpassen logica 
+        private readonly int Threshold = 100; //hoeveel meter is een sectie
         private int laps = 3; //hoeveel rondjes moet een auto hebben gereden
         private int finishedParticipants = 0;
 
@@ -28,16 +28,16 @@ namespace Controller {
             _timer = new Timer();
             _timer.Interval = 500;
             _timer.Elapsed += OnTimedEvent;
-            assignStart();
+            AssignStart();
 
             for (int i = 0; i < participants.Count; i++) {
-                participants[i].lapTime = 0;
-                participants[i].previousTime = StartTime;
+                participants[i].LapTime = 0;
+                participants[i].PreviousTime = StartTime;
                 participants[i].Laps = 0;
             }
-            start();
+            Start();
         }
-        public Race(Track track, List<IParticipant> participants, Boolean test) {
+        public Race(Track track, List<IParticipant> participants, Boolean test) {//constructor for unit tests
             Track = track;
             Participants = participants;
             _positions = new Dictionary<Section, SectionData>();
@@ -46,16 +46,16 @@ namespace Controller {
             _timer = new Timer();
             _timer.Interval = 500;
             _timer.Elapsed += OnTimedEvent;
-            assignStart();
+            AssignStart();
 
             for (int i = 0; i < participants.Count; i++) {
-                participants[i].lapTime = 0;
-                participants[i].previousTime = StartTime;
+                participants[i].LapTime = 0;
+                participants[i].PreviousTime = StartTime;
                 participants[i].Laps = 0;
             }
         }
 
-        public SectionData getSectionData(Section section) {
+        public SectionData GetSectionData(Section section) {
             if (!_positions.ContainsKey(section)) {
                 _positions[section] = new SectionData();
             }
@@ -70,7 +70,7 @@ namespace Controller {
             }
         }
 
-        private void assignStart() {
+        private void AssignStart() {
             List<Section> starts = new List<Section>();
             int startNR = 0;
             foreach (Section section in Track.Sections) {
@@ -78,24 +78,24 @@ namespace Controller {
                     starts.Add(section);
                 }
             }
-            for (int i = 0; i < Participants.Count(); i++) {
+            for (int i = 0; i < Participants.Count; i++) {
                 if (i + 1 > starts.Count * 2) {
                     return;
                 }
                 if (i % 2 == 0) {
-                    getSectionData(starts[startNR]).Left = Participants[i];
+                    GetSectionData(starts[startNR]).Left = Participants[i];
                 } else {
-                    getSectionData(starts[startNR]).Right = Participants[i];
+                    GetSectionData(starts[startNR]).Right = Participants[i];
                 }
-                competitors++;
+                CurrentCompetitorNumber++;
 
-                _positions[starts[startNR]] = getSectionData(starts[startNR]);
+                _positions[starts[startNR]] = GetSectionData(starts[startNR]);
                 if (i % 2 == 1) {
                     startNR++;
                 }
             }
         }
-        private void start() {
+        private void Start() {
             if (_timer is not null) {
                 _timer.Start();
                 _timer.AutoReset = true;
@@ -103,15 +103,8 @@ namespace Controller {
         }
 
         #region moveParticipants
-        //pva: 
-        //1. krijg de huidige sectie
-        //1.1 zoek door de posities naar de sectiedata met de deelnemer
-        //2. verwijder de deelnemer uit de sectie
-        //3. krijg de volgende sectie
-        //3.1 zoek door de track naar de index van de huidige sectie en tel daar 1 bij op
-        //4. stop de deelnemer in de goede sectiedata
 
-        public Section findNextSection(Section section, int sections) {
+        public Section FindNextSection(Section section, int sections) {
             Section next = section;
             if (Track.Sections is null) {
                 throw new NullReferenceException("Error: Track.Sections is null");
@@ -126,7 +119,7 @@ namespace Controller {
                     next = Track.Sections.Find(next).Next.Value;
                 }
             }
-            SectionData nextData = getSectionData(next);
+            SectionData nextData = GetSectionData(next);
             if (nextData.Left is not null && nextData.Right is not null) {
                 return section;
             }
@@ -136,8 +129,8 @@ namespace Controller {
 
         //functie die de driver plaatst in de volgende sectie. 
         //driver wordt altijd op links geplaatst tenzij er een ander in dezelfde sectie staat
-        public void placeDriverData(Section oldSection, Section newSection, IParticipant driver, int newDistance,int distance) {
-            SectionData data = getSectionData(newSection);
+        public void PlaceDriverData(Section oldSection, Section newSection, IParticipant driver, int newDistance,int distance) {
+            SectionData data = GetSectionData(newSection);
             
 
 
@@ -147,12 +140,12 @@ namespace Controller {
                 if (oldSection.SectionType.Equals(SectionTypes.Finish)) {
                     driver.Laps += 1;
 
-                    driver.lapTime = (DateTime.Now - driver.previousTime).TotalSeconds;
-                    driver.previousTime = DateTime.Now;
+                    driver.LapTime = (DateTime.Now - driver.PreviousTime).TotalSeconds;
+                    driver.PreviousTime = DateTime.Now;
                     ParticipantFinished?.Invoke(this, new UpdateRaceStatsArgs(this));
                     break;
                 } else {
-                    oldSection = findNextSection(oldSection, 1);
+                    oldSection = FindNextSection(oldSection, 1);
                 }
             }
 
@@ -178,7 +171,7 @@ namespace Controller {
         }
 
         //functie die de driver weghaalt van de oude positie
-        public void removeDriverData(SectionData data, Boolean left) {
+        public void RemoveDriverData(SectionData data, Boolean left) {
             if (left) {
                 data.Left = null;
                 data.DistanceLeft = 0;
@@ -197,7 +190,7 @@ namespace Controller {
             Boolean everyoneFinished = true;
             Section nextSection;
             Section? itterationSection;
-            checkBroken();
+            CheckBroken();
             //doorloopt alle secties in de race
             if (Track.Sections.Last is not null) {
                itterationSection = Track.Sections.Last.Value;
@@ -205,20 +198,20 @@ namespace Controller {
                 throw new NullReferenceException("Error: No Sections in Track.Sections");
             }
             while (itterationSection is not null) {
-                SectionData sectionData = getSectionData(itterationSection);
+                SectionData sectionData = GetSectionData(itterationSection);
                 if (sectionData.Left is not null) { //wanneer er een driver op de linker positie staat
                     //berekening voor het vooruitgaan
                     if (!sectionData.Left.Equipment.IsBroken) {
                         sectionData.DistanceLeft += (sectionData.Left.Equipment.Performance * sectionData.Left.Equipment.Speed);
                         if (sectionData.DistanceLeft >= Threshold) {//wanneer de driver naar de volgende moet worden verplaatst
                             int sections = (int)sectionData.DistanceLeft / Threshold;//berekent de hoeveelheid secties die de driver naar voren moet
-                            nextSection = findNextSection(itterationSection, sections);//zoekt de volgende sectie
+                            nextSection = FindNextSection(itterationSection, sections);//zoekt de volgende sectie
                             int newDistance = (int)(sectionData.DistanceLeft - (Threshold * sections));//berekent de nieuwe distance om in de nieuwe sectie te plaatsen
                             if (nextSection.Equals(itterationSection)) {
                                 sectionData.DistanceLeft = Threshold;
                             } else {
-                                placeDriverData(itterationSection, nextSection, sectionData.Left, newDistance, (int)sections);
-                                removeDriverData(sectionData, true);
+                                PlaceDriverData(itterationSection, nextSection, sectionData.Left, newDistance, (int)sections);
+                                RemoveDriverData(sectionData, true);
                                 driversChanged = true;
                             }
                         }
@@ -232,13 +225,13 @@ namespace Controller {
                         sectionData.DistanceRight += (sectionData.Right.Equipment.Performance * sectionData.Right.Equipment.Speed);
                         if (sectionData.DistanceRight >= Threshold) {
                             int sections = (int)sectionData.DistanceRight / Threshold;//berekent de hoeveelheid secties die de driver naar voren moet
-                            nextSection = findNextSection(itterationSection, sections);//zoekt de volgende sectie
+                            nextSection = FindNextSection(itterationSection, sections);//zoekt de volgende sectie
                             if (nextSection.Equals(itterationSection)) {
                                 sectionData.DistanceRight = Threshold;
                             } else {
                                 int newDistance = (int)(sectionData.DistanceRight - (Threshold * sections));//berekent de nieuwe distance om in de nieuwe sectie te plaatsen
-                                placeDriverData(itterationSection, nextSection, sectionData.Right, newDistance, (int)sections);
-                                removeDriverData(sectionData, false);
+                                PlaceDriverData(itterationSection, nextSection, sectionData.Right, newDistance, (int)sections);
+                                RemoveDriverData(sectionData, false);
                             }
                             driversChanged = true;
 
@@ -272,9 +265,9 @@ namespace Controller {
             
         }
 
-        private void checkBroken() {
-            for(int i = 0; i<competitors; i++) {
-                int random = _random.Next(0, Participants[i].Equipment.Quality*100);
+        private void CheckBroken() {
+            for(int i = 0; i<CurrentCompetitorNumber; i++) {
+                int random = _random.Next(0, Participants[i].Equipment.Quality*10);
                 if (!Participants[i].Equipment.IsBroken) {
                     if (random == 1) {
                         Participants[i].Equipment.IsBroken = true;

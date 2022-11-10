@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Model;
 namespace Controller{
     public static class Data {
-        public static Competition? Competition;
-        public static Race ?CurrentRace;
+        public static Competition? Competition { get; set; }
+        public static Race ?CurrentRace { get; set; }
         public static event EventHandler<NextRaceArgs>? NextRaceEvent;
         private static Boolean GUI = false;
 
@@ -25,19 +25,14 @@ namespace Controller{
             AddParticipants();
         }
         public static void AddParticipants() {
-            Driver driver1 = new Driver("TestDriver",TeamColor.Red);
+            Driver driver1 = new Driver("Jan",TeamColor.Red);
             Competition?.Participants.Add(driver1);
-            Driver driver2 = new Driver("DestDriver2",TeamColor.Green);
+            Driver driver2 = new Driver("Piet",TeamColor.Green);
             Competition?.Participants.Add(driver2);
-            Driver driver3 = new Driver("EestDriver3", TeamColor.Blue);
+            Driver driver3 = new Driver("Klaas", TeamColor.Blue);
             Competition?.Participants.Add(driver3);
-            Driver driver4 = new Driver("test", TeamColor.Pink);
-            Driver driver5 = new Driver("test", TeamColor.Yellow);
-            Driver driver6 = new Driver("test", TeamColor.Orange);
+            Driver driver4 = new Driver("Henk", TeamColor.Pink);
             Competition?.Participants.Add(driver4);
-            Competition?.Participants.Add(driver5);
-            Competition?.Participants.Add(driver6);
-
         }
 
         public static void NextRace() {
@@ -62,9 +57,9 @@ namespace Controller{
             //Track track1 = new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Finish }, 3);
             Track track1 = new Track("test 1", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Straight },3);
 
-            Track track2 = new Track("test 2", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight }, 3);
+           // Track track2 = new Track("test 2", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight }, 3);
 
-            //Track track2 = new Track("test 5", new SectionTypes[] {SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Straight,SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Finish, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight,SectionTypes.Straight },3);
+            Track track2 = new Track("test 5", new SectionTypes[] {SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Straight,SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Finish, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight,SectionTypes.Straight },3);
             Track track3 = new Track("test 3", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Straight,SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.Straight }, 3);
 
 
