@@ -6,8 +6,8 @@ using System.ComponentModel;
 internal class Program {
     private static void Main(string[] args) {
         Data.Initialize();
-        Data.nextRaceEvent += Visual.OnNextRaceEvent;
-        Data.nextRace();
+        Data.NextRaceEvent += Visual.OnNextRaceEvent;
+        Data.NextRace();
        
         //Visual.drawTrack(new Track("test 4", new SectionTypes[] { SectionTypes.RightCorner, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight, SectionTypes.RightCorner, SectionTypes.Straight }), 3);
         //Visual.drawTrack(new Track("test 1", new SectionTypes[] { SectionTypes.Straight, SectionTypes.Straight, SectionTypes.Straight }),0);

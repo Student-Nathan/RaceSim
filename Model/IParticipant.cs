@@ -8,8 +8,13 @@ namespace Model {
     public interface IParticipant {
         public string Name { get; }
         public int Points { get; set; }
-        public IEquipment Equipment { get; }
+        public IEquipment Equipment { get; set; }
         public TeamColor TeamColor { get; }
+        public int Laps { get; set; }
+
+        public double LapTime { get; set; }
+        public DateTime PreviousTime { get; set; }
+
 
     }
 
@@ -17,7 +22,8 @@ namespace Model {
         Red,
         Green,
         Yellow,
-        Grey,
+        Orange,
+        Pink,
         Blue
     }
 }
