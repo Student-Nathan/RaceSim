@@ -1,8 +1,0 @@
-Competitie: 2 onderdelen, 1 lijst:
-1. Top 5 racers op basis van punten (nog te doen: implementeer punten)
-2. 
-
-Huidige race: 3 onderdelen 2 lijsten:
-1. Rondetijd per deelnemer
-2. 
-3. 
